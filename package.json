@@ -1,0 +1,43 @@
+{
+  "name": "npm-windows-upgrade",
+  "version": "0.0.1",
+  "private": false,
+  "preferGlobal": "true",
+  "bin": {
+    "npm-windows-upgrade": "./bin/npm-windows-upgrade"
+  },
+  "repository": "https://github.com/felixrieseberg/npm-windows-upgrade",
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "keywords": [
+    "Windows",
+    "npm",
+    "npm upgrade"
+  ],
+  "author": {
+    "email": "felix@felixrieseberg.com",
+    "name": "Felix Rieseberg",
+    "url": "http://www.felixrieseberg.com"
+  },
+  "bugs": {
+    "url": "https://github.com/felixrieseberg/npm-windows-upgrade/issues"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/felixrieseberg/npm-windows-upgrade/blob/master/LICENSE"
+    }
+  ],
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-jscs": "^1.5.0",
+    "load-grunt-tasks": "^1.0.0"
+  },
+  "dependencies": {
+    "chalk": "^1.0.0",
+    "inquirer": "^0.8.5",
+    "prompt": "^0.2.14"
+  }
+}
