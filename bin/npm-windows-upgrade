@@ -10,8 +10,9 @@ var spawn = require('child_process').spawn,
     args = process.argv;
 
 // Helper functions
-function runPowershell(scriptPath, exitMessage, cb) {
-    var child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', "& {& '"+ scriptPath + "'}"]), // jshint ignore:line
+function runPowershell(version, cb) {
+    var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
+        child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', "& {& '"+ scriptPath + "' -version '" + version + "'}"]), // jshint ignore:line
         output = [];
 
     child.stdout.on('data', function (data) {
@@ -25,18 +26,10 @@ function runPowershell(scriptPath, exitMessage, cb) {
     });
 
     child.on('exit', function () {
-        console.log(exitMessage);
         cb(output);
     });
 
     child.stdin.end();
-}
-
-function upgradeNPM(cb) {
-    var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
-        exitMessage = 'npm upgrade has finished';
-
-    runPowershell(scriptPath, exitMessage, cb);
 }
 
 function getAvailableVersions(cb) {
@@ -70,27 +63,33 @@ if (!isWin) {
 console.log(chalk.yellow.bold('npm-upgrade-windows ' + package.version));
 
 // Execute
-checkForInternet(function (isOnline) {
-    if (!isOnline) {
-        return console.err(chalk.bold.red('We have trouble connecting to the Internet, aborting'));
+inquirer.prompt({type: 'confirm', name: 'c', message: 'This tool will upgrade npm. Do you want to continue?'}, function (response) {
+    if (!response.c) {
+        return console.log(chalk.bold.green('Well then, we\'re done here. Have a nice day!'));
     }
 
-    getAvailableVersions(function (versions) {
-        var questions = [{
-            type: 'confirm',
-            name: 'confirm',
-            message: 'This tool will upgrade your installed npm version. Do you want to continue?'
-        }, {
-            type: 'list',
-            name: 'version',
-            message: 'Which version do you want to install?',
-            choices: versions.reverse()
-        }];
+    checkForInternet(function (isOnline) {
+        if (!isOnline) {
+            return console.err(chalk.bold.red('We have trouble connecting to the Internet, aborting'));
+        }
 
-        inquirer.prompt(questions, function(answers) {
-            console.log(JSON.stringify(answers, null, "  ") );
+        getAvailableVersions(function (versions) {
+            var versionList = [{
+                type: 'list',
+                name: 'version',
+                message: 'Which version do you want to install?',
+                choices: versions.reverse()
+            }];
+
+            inquirer.prompt(versionList, function (answer) {
+                if (!answer.version) {
+                    return console.err(chalk.bold.red('Could not determine version that should be installed. Aborting'));
+                }
+                
+                runPowershell(answer.version, function (output) {
+                    console.log(output);
+                });
+            });
         });
     });
 });
-
-
