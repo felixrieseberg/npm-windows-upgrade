@@ -75,6 +75,8 @@ if (Test-Path $npmPath)
     # Copy .npmrc back
     $TempFile = $TempPath + "\.npmrc"
     Copy-Item $TempFile $npmPath -Force
+
+    "All done!"
 } else 
 {
     "Could not find NPM in " + $env:ProgramFiles  + "\nodejs\node_modules\npm - aborting upgrade"

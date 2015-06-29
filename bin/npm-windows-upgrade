@@ -5,6 +5,7 @@ var spawn = require('child_process').spawn,
     path = require('path'),
     chalk = require('chalk'),
     inquirer = require('inquirer'),
+    Spinner = require('cli-spinner').Spinner,
     package = require('../package.json'),
     isWin = /^win/.test(process.platform),
     args = process.argv;
@@ -54,9 +55,19 @@ function checkForInternet(cb) {
     });
 }
 
+function upgradeNPM(version) {
+    var spinner = new Spinner('Upgrading.. %s');
+    spinner.start();
+
+    runPowershell(version, function (output) {
+        spinner.stop(false);
+        console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
+    });
+}
+
 // Check OS
 if (!isWin) {
-    //throw('This script upgrade npm on Windows, but the OS is not Windows.');
+    throw('This script upgrade npm on Windows, but the OS is not Windows.');
 }
 
 // Print version
@@ -69,16 +80,14 @@ inquirer.prompt({type: 'confirm', name: 'c', message: 'This tool will upgrade np
     }
 
     checkForInternet(function (isOnline) {
+        var version = (args[2] && args[2].indexOf('--version:') > -1) ? args[2].slice(10) : null;
+
         if (!isOnline) {
             return console.err(chalk.bold.red('We have trouble connecting to the Internet, aborting'));
         }
 
-        var version = (args[2] && args[2].indexOf('--version:') > -1) ? args[2].slice(10) : null;
-
         if (version) {
-            runPowershell(version, function (output) {
-                console.log(output);
-            });
+            upgradeNPM(version);
         } else {
             getAvailableVersions(function (versions) {
                 var versionList = [{
@@ -93,9 +102,7 @@ inquirer.prompt({type: 'confirm', name: 'c', message: 'This tool will upgrade np
                         return console.err(chalk.bold.red('Could not determine version that should be installed. Aborting'));
                     }
                     
-                    runPowershell(answer.version, function (output) {
-                        console.log(output);
-                    });
+                    upgradeNPM(answer.version);
                 });
             });
         }
