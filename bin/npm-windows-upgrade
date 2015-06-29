@@ -13,7 +13,7 @@ var spawn = require('child_process').spawn,
 // Helper functions
 function runPowershell(version, cb) {
     var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
-        child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', "& {& '"+ scriptPath + "' -version '" + version + "'}"]), // jshint ignore:line
+        child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', '& {& \'' + scriptPath + '\' -version \'' + version + '\'}']),
         output = [];
 
     child.stdout.on('data', function (data) {
@@ -34,8 +34,6 @@ function runPowershell(version, cb) {
 }
 
 function getAvailableVersions(cb) {
-    var versions;
-
     exec('npm view npm versions --json', function (err, stdout) {
         if (err) {
             return console.error(chalk.red.bold('We could not show latest available versions. Try running this script again with the version you want to install (npm-upgrade-windows --version:3.0.0'));
@@ -59,7 +57,7 @@ function upgradeNPM(version) {
     var spinner = new Spinner('Upgrading.. %s');
     spinner.start();
 
-    runPowershell(version, function (output) {
+    runPowershell(version, function () {
         spinner.stop(false);
         console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
     });
@@ -101,7 +99,7 @@ inquirer.prompt({type: 'confirm', name: 'c', message: 'This tool will upgrade np
                     if (!answer.version) {
                         return console.err(chalk.bold.red('Could not determine version that should be installed. Aborting'));
                     }
-                    
+
                     upgradeNPM(answer.version);
                 });
             });
