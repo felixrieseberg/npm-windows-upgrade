@@ -54,6 +54,10 @@ if (!(IsAdministrator))
 
 $npmPath = $env:ProgramFiles + "\nodejs\node_modules\npm"
 
+if ((Test-Path $TempPath) -ne $True) {
+    $npmPath = $env:ProgramFiles(x86) + "\nodejs\node_modules\npm"
+} 
+
 if (Test-Path $npmPath) 
 {
     # Create tmp directory, delete files if they exist
