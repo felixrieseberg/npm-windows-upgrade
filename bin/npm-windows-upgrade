@@ -21,7 +21,7 @@ function runPowershell(version, cb) {
     });
 
     child.stderr.on('data', function (data) {
-        console.log('Configuration Error: ', data.toString());
+        console.log('Error: ', data.toString());
         output.push(data.toString());
     });
 
@@ -37,7 +37,7 @@ function getAvailableVersions(cb) {
 
     exec('npm view npm versions --json', function (err, stdout) {
         if (err) {
-            return console.err(chalk.red.bold('We could not show latest available versions. Try running this script again with the version you want to install (npm-upgrade-windows --version:3.0.0'));
+            return console.error(chalk.red.bold('We could not show latest available versions. Try running this script again with the version you want to install (npm-upgrade-windows --version:3.0.0'));
         }
 
         cb(JSON.parse(stdout));
@@ -73,23 +73,31 @@ inquirer.prompt({type: 'confirm', name: 'c', message: 'This tool will upgrade np
             return console.err(chalk.bold.red('We have trouble connecting to the Internet, aborting'));
         }
 
-        getAvailableVersions(function (versions) {
-            var versionList = [{
-                type: 'list',
-                name: 'version',
-                message: 'Which version do you want to install?',
-                choices: versions.reverse()
-            }];
+        var version = (args[2] && args[2].indexOf('--version:') > -1) ? args[2].slice(10) : null;
 
-            inquirer.prompt(versionList, function (answer) {
-                if (!answer.version) {
-                    return console.err(chalk.bold.red('Could not determine version that should be installed. Aborting'));
-                }
-                
-                runPowershell(answer.version, function (output) {
-                    console.log(output);
+        if (version) {
+            runPowershell(version, function (output) {
+                console.log(output);
+            });
+        } else {
+            getAvailableVersions(function (versions) {
+                var versionList = [{
+                    type: 'list',
+                    name: 'version',
+                    message: 'Which version do you want to install?',
+                    choices: versions.reverse()
+                }];
+
+                inquirer.prompt(versionList, function (answer) {
+                    if (!answer.version) {
+                        return console.err(chalk.bold.red('Could not determine version that should be installed. Aborting'));
+                    }
+                    
+                    runPowershell(answer.version, function (output) {
+                        console.log(output);
+                    });
                 });
             });
-        });
+        }
     });
 });

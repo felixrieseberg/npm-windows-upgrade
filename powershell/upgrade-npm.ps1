@@ -8,7 +8,17 @@
 # Usage: ./upgrade-npm.ps1 
 # ----------------------------------------------------------------------
 
+[CmdletBinding()]
+Param(
+    [Parameter(Mandatory=$True)]
+    [string]$version
+)
 
+$ErrorActionPreference = "Stop"
+
+#
+# Self-Elevate
+#
 function IsAdministrator
 {
     $Identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
@@ -22,9 +32,6 @@ function IsUacEnabled
     (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System).EnableLua -ne 0
 }
 
-#
-# Self-Elevate
-#
 if (!(IsAdministrator))
 {
     if (IsUacEnabled)
@@ -41,4 +48,34 @@ if (!(IsAdministrator))
     }
 }
 
+#
+# Upgrade
+#
 
+$npmPath = $env:ProgramFiles + "\nodejs\node_modules\npm"
+
+if (Test-Path $npmPath) 
+{
+    # Create tmp directory, delete files if they exist
+    $TempPath = $env:temp + "\npm_upgrade"
+    if ((Test-Path $TempPath) -ne $True)
+    {
+        New-Item -ItemType Directory -Force -Path $TempPath
+    }
+    
+    # Copy away .npmrc
+    cd $npmPath
+    Copy-Item .npmrc $TempPath
+
+    # Upgrade npm
+    $NodePath = $env:ProgramFiles + "\nodejs"
+    cd $NodePath
+    npm install npm@$version
+    
+    # Copy .npmrc back
+    $TempFile = $TempPath + "\.npmrc"
+    Copy-Item $TempFile $npmPath -Force
+} else 
+{
+    "Could not find NPM in " + $env:ProgramFiles  + "\nodejs\node_modules\npm - aborting upgrade"
+}
