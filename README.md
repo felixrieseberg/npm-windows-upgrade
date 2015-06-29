@@ -1,5 +1,5 @@
 # Upgrade NPM on Windows
-Upgrading npm on Windows requires a few manual steps to insure that PowerShell and CMD.exe actually find the new version of npm. This is a small tool made by Microsoft DX engineers with :heart: for npm and Node, boiling down the whole process to a simple command.
+Upgrading npm on Windows requires manual steps to ensure that PowerShell/CMD find the new version of npm. This is a small tool made by Microsoft DX engineers with :heart: for npm and Node, reducing the process to a simple command.
 
 ## Usage
 Run the following two commands from an elevated command prompt (either PowerShell or CMD.exe). To run PowerShell as Administrator, click Start, search for PowerShell, right-click PowerShell and select `Run as Administrator`.
