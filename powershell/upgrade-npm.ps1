@@ -7,7 +7,6 @@
 # ----------------------------------------------------------------------
 # Usage: ./upgrade-npm.ps1 
 # ----------------------------------------------------------------------
-
 [CmdletBinding()]
 Param(
     [Parameter(Mandatory=$True)]
@@ -26,7 +25,6 @@ function IsAdministrator
     $Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
-
 function IsUacEnabled
 {
     (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System).EnableLua -ne 0
@@ -44,20 +42,21 @@ if (!(IsAdministrator))
     }
     else
     {
-        throw "You must be administrator to run this script"
+        "You must be administrator to run this script"
+        return
     }
 }
 
 #
 # Upgrade
 #
-
 $NodePath = $env:ProgramFiles + "\nodejs"
-if ((Test-Path $TempPath) -ne $True) {
+if ((Test-Path $NodePath) -ne $True) {
     $NodePath = {env:ProgramFiles(x86)} + "\nodejs"
-} 
+}
 
 $NpmPath = $NodePath + "\node_modules\npm"
+"Assuming npm in " + $NpmPath
 
 if (Test-Path $NpmPath) 
 {
@@ -74,16 +73,19 @@ if (Test-Path $NpmPath)
     if (Test-Path .npmrc) 
     {
         $Npmrc = $True
+        "Saving .npmrc"
         Copy-Item .npmrc $TempPath
     }
 
     # Upgrade npm
     cd $NodePath
+    "Upgrading npm in " + $NodePath
     npm install npm@$version
     
     # Copy .npmrc back
     if ($Npmrc) 
     {
+        "Restoring .npmrc"
         $TempFile = $TempPath + "\.npmrc"
         Copy-Item $TempFile $NpmPath -Force
     }

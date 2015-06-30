@@ -17,7 +17,6 @@ function runPowershell(version, cb) {
         output = [];
 
     child.stdout.on('data', function (data) {
-        console.log(data.toString());
         output.push(data.toString());
     });
 
@@ -57,9 +56,18 @@ function upgradeNPM(version) {
     var spinner = new Spinner('Upgrading.. %s');
     spinner.start();
 
-    runPowershell(version, function () {
+    runPowershell(version, function (output) {
         spinner.stop(false);
-        console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
+        console.log('\n');
+
+        if (output[0] && output[0].indexOf('You must be administrator to run this script') > -1) {
+            console.log(chalk.bold.red('Upgrade aborted: You must be administrator to run this script. Upgrade aborted.'));
+        } else if (output[output.length].indexOf('All done!') > -1) {
+            console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
+        } else {
+            console.log(chalk.bold.red('An unknown error occurred. The output of the upgrader script was: '));
+            console.log(output);
+        }
     });
 }
 
