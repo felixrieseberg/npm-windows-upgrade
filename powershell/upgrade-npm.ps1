@@ -70,15 +70,23 @@ if (Test-Path $NpmPath)
     
     # Copy away .npmrc
     cd $NpmPath
-    Copy-Item .npmrc $TempPath
+    $Npmrc = $False
+    if (Test-Path .npmrc) 
+    {
+        $Npmrc = $True
+        Copy-Item .npmrc $TempPath
+    }
 
     # Upgrade npm
     cd $NodePath
     npm install npm@$version
     
     # Copy .npmrc back
-    $TempFile = $TempPath + "\.npmrc"
-    Copy-Item $TempFile $NpmPath -Force
+    if ($Npmrc) 
+    {
+        $TempFile = $TempPath + "\.npmrc"
+        Copy-Item $TempFile $NpmPath -Force
+    }
 
     "All done!"
 } else 
