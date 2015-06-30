@@ -52,13 +52,14 @@ if (!(IsAdministrator))
 # Upgrade
 #
 
-$npmPath = $env:ProgramFiles + "\nodejs\node_modules\npm"
-
+$NodePath = $env:ProgramFiles + "\nodejs"
 if ((Test-Path $TempPath) -ne $True) {
-    $npmPath = $env:ProgramFiles(x86) + "\nodejs\node_modules\npm"
+    $NodePath = {env:ProgramFiles(x86)} + "\nodejs"
 } 
 
-if (Test-Path $npmPath) 
+$NpmPath = $NodePath + "\node_modules\npm"
+
+if (Test-Path $NpmPath) 
 {
     # Create tmp directory, delete files if they exist
     $TempPath = $env:temp + "\npm_upgrade"
@@ -68,17 +69,16 @@ if (Test-Path $npmPath)
     }
     
     # Copy away .npmrc
-    cd $npmPath
+    cd $NpmPath
     Copy-Item .npmrc $TempPath
 
     # Upgrade npm
-    $NodePath = $env:ProgramFiles + "\nodejs"
     cd $NodePath
     npm install npm@$version
     
     # Copy .npmrc back
     $TempFile = $TempPath + "\.npmrc"
-    Copy-Item $TempFile $npmPath -Force
+    Copy-Item $TempFile $NpmPath -Force
 
     "All done!"
 } else 
