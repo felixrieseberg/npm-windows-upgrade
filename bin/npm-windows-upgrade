@@ -62,10 +62,10 @@ function upgradeNPM(version) {
 
         if (output[0] && output[0].indexOf('You must be administrator to run this script') > -1) {
             console.log(chalk.bold.red('Upgrade aborted: You must be administrator to run this script. Upgrade aborted.'));
-        } else if (output[output.length - 1].indexOf('All done!') > -1) {
+        } else if (output && output.length > 0 && output[output.length - 1].indexOf('All done!') > -1) {
             console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
         } else {
-            console.log(chalk.bold.red('An unknown error occurred. The output of the upgrader script was: '));
+            console.log(chalk.bold.red('Error: We cannot confirm that the upgrade succeeded. The output of the script was: '));
             console.log(output);
         }
     });
