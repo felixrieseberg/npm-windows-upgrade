@@ -16,11 +16,11 @@ Param(
 
 $ErrorActionPreference = "Stop"
 
-Write-Debug "PowerShell received $NodePath as the nodejs path."
+Write-Debug "PowerShell received $NodePath as the NodeJS path."
 
 #
 # Self-Elevate
-#
+# ---------------------------------------------------------------------------------------------------------
 function IsAdministrator
 {
     $Identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
@@ -52,13 +52,15 @@ if (!(IsAdministrator))
 
 #
 # Upgrade
-#
+# ---------------------------------------------------------------------------------------------------------
 if ((Test-Path $NodePath) -ne $True) {
+    # If the user installed an x86 version of NodeJS on an x64 system, the NodeJS installation will be found
+    # in env:ProgramFiles(x86)
     $NodePath = {env:ProgramFiles(x86)} + "\nodejs"
 }
-
 $NpmPath = $NodePath + "\node_modules\npm"
-"Assuming npm in " + $NpmPath
+
+Write-Debug "Assuming npm in " + $NpmPath
 
 if (Test-Path $NpmPath)
 {
@@ -75,19 +77,19 @@ if (Test-Path $NpmPath)
     if (Test-Path .npmrc)
     {
         $Npmrc = $True
-        "Saving .npmrc"
+        Write-Debug "Saving .npmrc"
         Copy-Item .npmrc $TempPath
     }
 
     # Upgrade npm
     cd $NodePath
-    "Upgrading npm in " + $NodePath
+    Write-Debug "Upgrading npm in " + $NodePath
     .\npm install npm@$version
 
     # Copy .npmrc back
     if ($Npmrc)
     {
-        "Restoring .npmrc"
+        Write-Debug "Restoring .npmrc"
         $TempFile = $TempPath + "\.npmrc"
         Copy-Item $TempFile $NpmPath -Force
     }
