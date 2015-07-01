@@ -37,6 +37,7 @@ if (!(IsAdministrator))
 {
     if (IsUacEnabled)
     {
+        "We need to relaunch this script as administrator"
         [string[]]$argList = @('-NoProfile', '-NoExit', '-File', $MyInvocation.MyCommand.Path)
         $argList += $MyInvocation.BoundParameters.GetEnumerator() | Foreach {"-$($_.Key)", "$($_.Value)"}
         $argList += $MyInvocation.UnboundArguments
