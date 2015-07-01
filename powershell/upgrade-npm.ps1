@@ -5,7 +5,7 @@
 # felix.rieseberg@microsoft.com
 
 # ----------------------------------------------------------------------
-# Usage: ./upgrade-npm.ps1 
+# Usage: ./upgrade-npm.ps1
 # ----------------------------------------------------------------------
 [CmdletBinding()]
 Param(
@@ -50,15 +50,18 @@ if (!(IsAdministrator))
 #
 # Upgrade
 #
-$NodePath = $env:ProgramFiles + "\nodejs"
+$NodePath = npm config -g get prefix
 if ((Test-Path $NodePath) -ne $True) {
+  $NodePath = $env:ProgramFiles + "\nodejs"
+  if ((Test-Path $NodePath) -ne $True) {
     $NodePath = {env:ProgramFiles(x86)} + "\nodejs"
+  }
 }
 
 $NpmPath = $NodePath + "\node_modules\npm"
 "Assuming npm in " + $NpmPath
 
-if (Test-Path $NpmPath) 
+if (Test-Path $NpmPath)
 {
     # Create tmp directory, delete files if they exist
     $TempPath = $env:temp + "\npm_upgrade"
@@ -66,11 +69,11 @@ if (Test-Path $NpmPath)
     {
         New-Item -ItemType Directory -Force -Path $TempPath
     }
-    
+
     # Copy away .npmrc
     cd $NpmPath
     $Npmrc = $False
-    if (Test-Path .npmrc) 
+    if (Test-Path .npmrc)
     {
         $Npmrc = $True
         "Saving .npmrc"
@@ -81,9 +84,9 @@ if (Test-Path $NpmPath)
     cd $NodePath
     "Upgrading npm in " + $NodePath
     npm install npm@$version
-    
+
     # Copy .npmrc back
-    if ($Npmrc) 
+    if ($Npmrc)
     {
         "Restoring .npmrc"
         $TempFile = $TempPath + "\.npmrc"
@@ -91,7 +94,7 @@ if (Test-Path $NpmPath)
     }
 
     "All done!"
-} else 
+} else
 {
     "Could not find NPM in " + $env:ProgramFiles  + "\nodejs\node_modules\npm - aborting upgrade"
 }
