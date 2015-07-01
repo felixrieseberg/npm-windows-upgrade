@@ -26,4 +26,4 @@ This tool was made by Microsoft with :heart: for npm and Node, but it is provide
 implied. For details, please consult the `LICENSE` file.
 
 ## Contributing
-Contributions are extremely welcome! For JavScript code, please run `grunt test` to check your code against JSCS and JSHint. There's no formal coding guideline for the PowerShell pieces of this tool, but do write code that is commented and comprehensible.
+Contributions are extremely welcome! For JavaScript code, please run `grunt test` to check your code against JSCS and JSHint. There's no formal coding guideline for the PowerShell pieces of this tool, but do write code that is commented and comprehensible.

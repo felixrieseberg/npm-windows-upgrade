@@ -5,15 +5,18 @@
 # felix.rieseberg@microsoft.com
 
 # ----------------------------------------------------------------------
-# Usage: ./upgrade-npm.ps1 
+# Usage: ./upgrade-npm.ps1
 # ----------------------------------------------------------------------
 [CmdletBinding()]
 Param(
     [Parameter(Mandatory=$True)]
-    [string]$version
+    [string]$version,
+    [string]$NodePath=(Join-Path $env:ProgramFiles nodejs)
 )
 
 $ErrorActionPreference = "Stop"
+
+Write-Debug "PowerShell received $NodePath as the nodejs path."
 
 #
 # Self-Elevate
@@ -50,7 +53,6 @@ if (!(IsAdministrator))
 #
 # Upgrade
 #
-$NodePath = $env:ProgramFiles + "\nodejs"
 if ((Test-Path $NodePath) -ne $True) {
     $NodePath = {env:ProgramFiles(x86)} + "\nodejs"
 }
@@ -58,7 +60,7 @@ if ((Test-Path $NodePath) -ne $True) {
 $NpmPath = $NodePath + "\node_modules\npm"
 "Assuming npm in " + $NpmPath
 
-if (Test-Path $NpmPath) 
+if (Test-Path $NpmPath)
 {
     # Create tmp directory, delete files if they exist
     $TempPath = $env:temp + "\npm_upgrade"
@@ -66,11 +68,11 @@ if (Test-Path $NpmPath)
     {
         New-Item -ItemType Directory -Force -Path $TempPath
     }
-    
+
     # Copy away .npmrc
     cd $NpmPath
     $Npmrc = $False
-    if (Test-Path .npmrc) 
+    if (Test-Path .npmrc)
     {
         $Npmrc = $True
         "Saving .npmrc"
@@ -80,10 +82,10 @@ if (Test-Path $NpmPath)
     # Upgrade npm
     cd $NodePath
     "Upgrading npm in " + $NodePath
-    npm install npm@$version
-    
+    .\npm install npm@$version
+
     # Copy .npmrc back
-    if ($Npmrc) 
+    if ($Npmrc)
     {
         "Restoring .npmrc"
         $TempFile = $TempPath + "\.npmrc"
@@ -91,7 +93,7 @@ if (Test-Path $NpmPath)
     }
 
     "All done!"
-} else 
+} else
 {
     "Could not find NPM in " + $env:ProgramFiles  + "\nodejs\node_modules\npm - aborting upgrade"
 }
