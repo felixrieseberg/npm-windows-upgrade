@@ -11,6 +11,13 @@ var spawn = require('child_process').spawn,
     args = process.argv;
 
 // Helper functions
+/**
+ * Executes the PS1 script upgrading npm
+ * @param  {string}   version     - The version to be installed (npm install npm@{version})
+ * @param  {string}   nodePath    - Path to Node installation (optional)
+ * @param  {Function} cb          - Callback
+ * @return {stderr[], stdout[]}   - stderr and stdout received from the PS1 process
+ */
 function runPowershell(version, nodePath, cb) {
     var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
         specialArgs = nodePath === null ?
@@ -36,6 +43,11 @@ function runPowershell(version, nodePath, cb) {
     child.stdin.end();
 }
 
+/**
+ * Checks for an active Internet connection by doing a DNS lookup of Microsoft.com
+ * @param  {Function} cb - Callback
+ * @return {boolean}     - True if lookup succeeded, false if it didn't
+ */
 function checkForInternet(cb) {
     require('dns').lookup('microsoft.com', function (err) {
         if (err && err.code === 'ENOTFOUND') {
@@ -46,6 +58,11 @@ function checkForInternet(cb) {
     });
 }
 
+/**
+ * Fetches the published versions of npm from the npm registry
+ * @param  {Function} cb - Callback
+ * @return {versions[]}  - Array of the available versions
+ */
 function getAvailableNPMVersions(cb) {
     exec('npm view npm versions --json', function (err, stdout) {
         if (err) {
@@ -56,6 +73,11 @@ function getAvailableNPMVersions(cb) {
     });
 }
 
+/**
+ * Gets the currently installed version of npm (npm -v)
+ * @param  {Function} cb - Callback
+ * @return {string}      - Installed version of npm
+ */
 function getNPMVersion(cb) {
     var nodeVersion;
 
@@ -70,6 +92,11 @@ function getNPMVersion(cb) {
     });
 }
 
+/**
+ * Attempts to get the current installation location of npm by looking up the global prefix.
+ * @param  {Function} cb - Callback
+ * @return {string}      - NodeJS installation path
+ */
 function getNodePath(cb) {
     var nodePath;
 
@@ -84,6 +111,11 @@ function getNodePath(cb) {
     });
 }
 
+/**
+ * Checks the current Windows PS1 execution policy. The upgrader requires an unrestricted policy.
+ * @param  {Function} cb - Callback
+ * @return {[type]}      - True if unrestricted, false if it isn't
+ */
 function checkExecutionPolicy(cb) {
     var child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', 'Get-ExecutionPolicy']),
         output = [], unrestricted, i;
@@ -117,6 +149,10 @@ function checkExecutionPolicy(cb) {
 }
 
 // Upgrade Method
+/**
+ * The actual upgrade method, utilizing all the helper methods above
+ * @param  {string} version - Version that should be installed
+ */
 function upgradeNPM(version) {
     var spinner = new Spinner('Upgrading.. %s');
     spinner.start();
