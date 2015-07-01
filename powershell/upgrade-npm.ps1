@@ -10,10 +10,13 @@
 [CmdletBinding()]
 Param(
     [Parameter(Mandatory=$True)]
-    [string]$version
+    [string]$version,
+    [string]$NodePath=(Join-Path $env:ProgramFiles nodejs)
 )
 
 $ErrorActionPreference = "Stop"
+
+Write-Debug "PowerShell received $NodePath as the nodejs path."
 
 #
 # Self-Elevate
@@ -50,12 +53,8 @@ if (!(IsAdministrator))
 #
 # Upgrade
 #
-$NodePath = npm config -g get prefix
 if ((Test-Path $NodePath) -ne $True) {
-  $NodePath = $env:ProgramFiles + "\nodejs"
-  if ((Test-Path $NodePath) -ne $True) {
     $NodePath = {env:ProgramFiles(x86)} + "\nodejs"
-  }
 }
 
 $NpmPath = $NodePath + "\node_modules\npm"
@@ -83,7 +82,7 @@ if (Test-Path $NpmPath)
     # Upgrade npm
     cd $NodePath
     "Upgrading npm in " + $NodePath
-    npm install npm@$version
+    .\npm install npm@$version
 
     # Copy .npmrc back
     if ($Npmrc)

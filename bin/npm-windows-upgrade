@@ -11,10 +11,18 @@ var spawn = require('child_process').spawn,
     args = process.argv;
 
 // Helper functions
-function runPowershell(version, cb) {
+function runPowershell(version, nodePath, cb) {
     var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
-        child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', '& {& \'' + scriptPath + '\' -version \'' + version + '\'}']),
+        specialArgs = nodePath === null ?
+            '& {& \'' + scriptPath + '\' -version \'' + version + '\' }' :
+            '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath \'' + nodePath + '\' }',
+        psArgs = ['-NoProfile', '-NoLogo', specialArgs],
+        child = spawn('powershell.exe', psArgs),
         output = [];
+
+    if (nodePath) {
+        console.log('powershell executed with args: ' + psArgs.join(' '));
+    }
 
     child.stdout.on('data', function (data) {
         output.push(data.toString());
@@ -35,7 +43,7 @@ function runPowershell(version, cb) {
 function getAvailableVersions(cb) {
     exec('npm view npm versions --json', function (err, stdout) {
         if (err) {
-            return console.error(chalk.red.bold('We could not show latest available versions. Try running this script again with the version you want to install (npm-upgrade-windows --version:3.0.0'));
+            return console.error(chalk.red.bold('We could not show latest available versions. Try running this script again with the version you want to install (npm-windows-upgrade --version:3.0.0'));
         }
 
         cb(JSON.parse(stdout));
@@ -52,22 +60,36 @@ function checkForInternet(cb) {
     });
 }
 
+function getNodePath(cb) {
+    exec('npm config --global get prefix', function (err, stdout) {
+        if (err) {
+            console.log('Could not determine nodejs install location, will default to a program files directory.');
+            cb(null);
+        } else {
+            var nodePath = stdout.replace(/\n/, '');
+            cb(nodePath);
+        }
+    });
+}
+
 function upgradeNPM(version) {
     var spinner = new Spinner('Upgrading.. %s');
     spinner.start();
 
-    runPowershell(version, function (output) {
-        spinner.stop(false);
-        console.log('\n');
+    getNodePath(function (nodePath) {
+        runPowershell(version, nodePath, function (output) {
+            spinner.stop(false);
+            console.log('\n');
 
-        if (output[0] && output[0].indexOf('You must be administrator to run this script') > -1) {
-            console.log(chalk.bold.red('Upgrade aborted: You must be administrator to run this script. Upgrade aborted.'));
-        } else if (output && output.length > 0 && output[output.length - 1].indexOf('All done!') > -1) {
-            console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
-        } else {
-            console.log(chalk.bold.red('Error: We cannot confirm that the upgrade succeeded. The output of the script was: '));
-            console.log(output);
-        }
+            if (output[0] && output[0].indexOf('You must be administrator to run this script') > -1) {
+                console.log(chalk.bold.red('Upgrade aborted: You must be administrator to run this script. Upgrade aborted.'));
+            } else if (output && output.length > 0 && output[output.length - 1].indexOf('All done!') > -1) {
+                console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
+            } else {
+                console.log(chalk.bold.red('An unknown error occurred. The output of the upgrader script was: '));
+                console.log(output);
+            }
+        });
     });
 }
 
@@ -109,10 +131,14 @@ if (!isWin) {
 }
 
 // Print version
-console.log(chalk.yellow.bold('npm-upgrade-windows ' + package.version));
+console.log(chalk.yellow.bold('npm-windows-upgrade ' + package.version));
 
 // Execute
-inquirer.prompt({type: 'confirm', name: 'c', message: 'This tool will upgrade npm. Do you want to continue?'}, function (response) {
+inquirer.prompt({
+    type: 'confirm',
+    name: 'c',
+    message: 'This tool will upgrade npm. Do you want to continue?'
+}, function (response) {
     if (!response.c) {
         return console.log(chalk.bold.green('Well then, we\'re done here. Have a nice day!'));
     }
