@@ -17,7 +17,7 @@ npm install -g npm-windows-upgrade
 npm-windows-upgrade
 ```
 
-The tool will show you a list of all the published and available versions of npm (including pre-release and beta versions). Choose the one you want to install and let it do it's thing!
+The tool will show you a list of all the published and available versions of npm (including pre-release and beta versions). Choose the one you want to install and let it do its thing!
 
 ## Issues & Support
 Please do [report your issues on GitHub](https://github.com/felixrieseberg/npm-windows-upgrade/issues). There are a bunch of Windows versions, hundreds of different ways to install Node and npm, and it's likely that this script won't work with a few of them. If you run into trouble and need npm upgraded as soon as possible, [please follow the manual instructions](https://github.com/npm/npm/wiki/Troubleshooting#upgrading-on-windows).
