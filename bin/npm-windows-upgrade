@@ -154,7 +154,9 @@ function checkExecutionPolicy(cb) {
  * @param  {string} version - Version that should be installed
  */
 function upgradeNPM(version) {
-    var spinner = new Spinner('Upgrading.. %s');
+    var spinner = new Spinner('Upgrading.. %s'),
+        info;
+
     spinner.start();
 
     getNodePath(function (nodePath) {
@@ -162,16 +164,33 @@ function upgradeNPM(version) {
             spinner.stop(false);
             console.log('\n');
 
+            // If we failed to elevate to administrative rights, we have to abort.
             if (stdout[0] && stdout[0].indexOf('You must be administrator to run this script') > -1) {
-                console.log(chalk.bold.red('Upgrade aborted: You must be administrator to run this script. Upgrade aborted.'));
-            } else if (stdout && stdout.length > 0 && stdout[stdout.length - 1].indexOf('All done!') > -1) {
-                console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
-            } else if (stderr.length < 1) {
-                console.log(chalk.bold.green('We cannot confirm that the upgrade succeeded, but did not find any errors either.'));
-            } else {
-                console.log(chalk.bold.red('An unknown error occurred. The output of the upgrader script was: '));
-                console.log(stdout, stderr);
+                info = 'Upgrade aborted: You must be administrator to run this script. Upgrade aborted.';
+                return console.log(chalk.bold.red(info));
             }
+
+            // If PowerShell had to relaunch as Administrator, we'll already be here - without usable output.
+            if (stdout[0] && stdout[0].indexOf('We need to relaunch this script as administrator') > -1) {
+                info = 'Since this script was run without administrative rights, we had to launch a new window.\n';
+                info += 'Please check it for additional output.';
+                return console.log(chalk.bold.yellow(info));
+            }
+
+            // Confirm that the upgrade actually worked
+            getNPMVersion(function (installedVersion) {
+                if (installedVersion === version) {
+                    info = 'Upgrade finished. Your new npm version is ' + installedVersion + '. Have a nice day!';
+                    return console.log(chalk.bold.green(info));
+                }
+
+                // Uh-oh, something didn't work as it should have.
+                info = 'You wanted to install npm ' + version + ', but the installed version is' + installedVersion + '.\n';
+                info += 'Please consider reporting your trouble to http://aka.ms/npm-issues.';
+                console.log(chalk.bold.red(info));
+                console.log('Here is the output from the upgrader script:');
+                return console.log(stdout, stderr);
+            });
         });
     });
 }
