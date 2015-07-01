@@ -18,36 +18,22 @@ function runPowershell(version, nodePath, cb) {
             '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath \'' + nodePath + '\' }',
         psArgs = ['-NoProfile', '-NoLogo', specialArgs],
         child = spawn('powershell.exe', psArgs),
-        output = [];
-
-    if (nodePath) {
-        console.log('powershell executed with args: ' + psArgs.join(' '));
-    }
+        stdout = [], stderr = [];
 
     child.stdout.on('data', function (data) {
-        output.push(data.toString());
+        stdout.push(data.toString());
     });
 
     child.stderr.on('data', function (data) {
         console.log('Error: ', data.toString());
-        output.push(data.toString());
+        stderr.push(data.toString());
     });
 
     child.on('exit', function () {
-        cb(output);
+        cb(stderr, stdout);
     });
 
     child.stdin.end();
-}
-
-function getAvailableVersions(cb) {
-    exec('npm view npm versions --json', function (err, stdout) {
-        if (err) {
-            return console.error(chalk.red.bold('We could not show latest available versions. Try running this script again with the version you want to install (npm-windows-upgrade --version:3.0.0'));
-        }
-
-        cb(JSON.parse(stdout));
-    });
 }
 
 function checkForInternet(cb) {
@@ -60,36 +46,41 @@ function checkForInternet(cb) {
     });
 }
 
-function getNodePath(cb) {
-    exec('npm config --global get prefix', function (err, stdout) {
+function getAvailableNPMVersions(cb) {
+    exec('npm view npm versions --json', function (err, stdout) {
         if (err) {
-            console.log('Could not determine nodejs install location, will default to a program files directory.');
+            return console.error(chalk.red.bold('We could not show latest available versions. Try running this script again with the version you want to install (npm-windows-upgrade --version:3.0.0'));
+        }
+
+        cb(JSON.parse(stdout));
+    });
+}
+
+function getNPMVersion(cb) {
+    var nodeVersion;
+
+    exec('npm -v', function (err, stdout) {
+        if (err) {
+            console.log(chalk.bold.red('Could not determine npm version.'));
             cb(null);
         } else {
-            var nodePath = stdout.replace(/\n/, '');
-            cb(nodePath);
+            nodeVersion = stdout.replace(/\n/, '');
+            cb(nodeVersion);
         }
     });
 }
 
-function upgradeNPM(version) {
-    var spinner = new Spinner('Upgrading.. %s');
-    spinner.start();
+function getNodePath(cb) {
+    var nodePath;
 
-    getNodePath(function (nodePath) {
-        runPowershell(version, nodePath, function (output) {
-            spinner.stop(false);
-            console.log('\n');
-
-            if (output[0] && output[0].indexOf('You must be administrator to run this script') > -1) {
-                console.log(chalk.bold.red('Upgrade aborted: You must be administrator to run this script. Upgrade aborted.'));
-            } else if (output && output.length > 0 && output[output.length - 1].indexOf('All done!') > -1) {
-                console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
-            } else {
-                console.log(chalk.bold.red('An unknown error occurred. The output of the upgrader script was: '));
-                console.log(output);
-            }
-        });
+    exec('npm config --global get prefix', function (err, stdout) {
+        if (err) {
+            console.log('Could not determine NodeJS location, will default to a Program Files directory.');
+            cb(null);
+        } else {
+            nodePath = stdout.replace(/\n/, '');
+            cb(nodePath);
+        }
     });
 }
 
@@ -125,6 +116,30 @@ function checkExecutionPolicy(cb) {
     child.stdin.end();
 }
 
+// Upgrade Method
+function upgradeNPM(version) {
+    var spinner = new Spinner('Upgrading.. %s');
+    spinner.start();
+
+    getNodePath(function (nodePath) {
+        runPowershell(version, nodePath, function (stderr, stdout) {
+            spinner.stop(false);
+            console.log('\n');
+
+            if (stdout[0] && stdout[0].indexOf('You must be administrator to run this script') > -1) {
+                console.log(chalk.bold.red('Upgrade aborted: You must be administrator to run this script. Upgrade aborted.'));
+            } else if (stdout && stdout.length > 0 && stdout[stdout.length - 1].indexOf('All done!') > -1) {
+                console.log(chalk.bold.green('Upgrade finished. Have a nice day!'));
+            } else if (stderr.length < 1) {
+                console.log(chalk.bold.green('We cannot confirm that the upgrade succeeded, but did not find any errors either.'));
+            } else {
+                console.log(chalk.bold.red('An unknown error occurred. The output of the upgrader script was: '));
+                console.log(stdout, stderr);
+            }
+        });
+    });
+}
+
 // Check OS
 if (!isWin) {
     throw('This script upgrades npm on Windows, but the OS is not Windows.');
@@ -145,7 +160,7 @@ inquirer.prompt({
 
     checkExecutionPolicy(function (isUnrestricted) {
         if (!isUnrestricted) {
-            console.log(chalk.red.bold('Scripts cannot be executed on this system.'));
+            console.log(chalk.bold.red('Scripts cannot be executed on this system.'));
             console.log('To fix this issue, please run the command below as Administrator and try again:');
             console.log('Set-ExecutionPolicy Unrestricted -Scope CurrentUser');
             return;
@@ -155,13 +170,13 @@ inquirer.prompt({
             var version = (args[2] && args[2].indexOf('--version:') > -1) ? args[2].slice(10) : null;
 
             if (!isOnline) {
-                return console.err(chalk.bold.red('We have trouble connecting to the Internet, aborting'));
+                return console.err(chalk.bold.red('We have trouble connecting to the Internet. Aborting.'));
             }
 
             if (version) {
                 upgradeNPM(version);
             } else {
-                getAvailableVersions(function (versions) {
+                getAvailableNPMVersions(function (versions) {
                     var versionList = [{
                         type: 'list',
                         name: 'version',
