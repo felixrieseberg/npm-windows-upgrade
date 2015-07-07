@@ -61,7 +61,7 @@ $NpmPath = (Join-Path $NodePath "node_modules\npm")
 
 Write-Debug "Assuming npm in $NpmPath"
 
-if (Test-Path $NpmPath)
+if (Test-Path $NodePath)
 {
     # Create tmp directory, delete files if they exist
     $TempPath = "$env:temp\npm_upgrade"
@@ -71,13 +71,17 @@ if (Test-Path $NpmPath)
     }
 
     # Copy away .npmrc
-    cd $NpmPath
     $Npmrc = $False
-    if (Test-Path .npmrc)
+    if (Test-Path $NpmPath)
     {
-        $Npmrc = $True
-        Write-Debug "Saving .npmrc"
-        Copy-Item .npmrc $TempPath
+        cd $NpmPath
+
+        if (Test-Path .npmrc)
+        {
+            $Npmrc = $True
+            Write-Debug "Saving .npmrc"
+            Copy-Item .npmrc $TempPath
+        }
     }
 
     # Upgrade npm
