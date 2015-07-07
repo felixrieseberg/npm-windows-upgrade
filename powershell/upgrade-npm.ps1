@@ -57,7 +57,7 @@ if ((Test-Path $NodePath) -ne $True) {
     # in env:ProgramFiles(x86)
     $NodePath = (Join-Path $env:ProgramFiles nodejs)
 }
-$NpmPath = "$NodePath\node_modules\npm"
+$NpmPath = (Join-Path $NodePath "node_modules\npm")
 
 Write-Debug "Assuming npm in $NpmPath"
 
@@ -96,5 +96,5 @@ if (Test-Path $NpmPath)
     "All done!"
 } else
 {
-    "Could not find NPM in " + $env:ProgramFiles  + "\nodejs\node_modules\npm - aborting upgrade"
+    "Could not find NPM in $NpmPath - aborting upgrade"
 }
