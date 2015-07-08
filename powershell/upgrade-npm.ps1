@@ -31,6 +31,54 @@ function IsUacEnabled
     (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System).EnableLua -ne 0
 }
 
+function UpdateNpm($PassedNodePath)
+{
+    $NpmPath = (Join-Path $PassedNodePath "node_modules\npm")
+    Write-Debug "Assuming npm in $NpmPath"
+
+    if (Test-Path $PassedNodePath)
+    {
+        # Create tmp directory, delete files if they exist
+        $TempPath = "$env:temp\npm_upgrade"
+        if ((Test-Path $TempPath) -ne $True)
+        {
+            New-Item -ItemType Directory -Force -Path $TempPath
+        }
+
+        # Copy away .npmrc
+        $Npmrc = $False
+        if (Test-Path $NpmPath)
+        {
+            cd $NpmPath
+
+            if (Test-Path .npmrc)
+            {
+                $Npmrc = $True
+                Write-Debug "Saving .npmrc"
+                Copy-Item .npmrc $TempPath
+            }
+        }
+
+        # Upgrade npm
+        cd $PassedNodePath
+        Write-Debug "Upgrading npm in $PassedNodePath"
+        .\npm install npm@$version
+
+        # Copy .npmrc back
+        if ($Npmrc)
+        {
+            Write-Debug "Restoring .npmrc"
+            $TempFile = "$TempPath\.npmrc"
+            Copy-Item $TempFile $NpmPath -Force
+        }
+
+        "All done!"
+    } else
+    {
+        "Could not find installation location (assumed in $PassedNodePath) - aborting upgrade"
+    }
+}
+
 if (!(IsAdministrator))
 {
     if (IsUacEnabled)
@@ -52,53 +100,16 @@ if (!(IsAdministrator))
 #
 # Upgrade
 # ---------------------------------------------------------------------------------------------------------
-if ((Test-Path $NodePath) -ne $True) {
+$AssumedNpmPath = (Join-Path $NodePath "node_modules\npm")
+
+if ((Test-Path $AssumedNpmPath) -ne $True)
+{
+    $NodePath = (Join-Path $env:ProgramFiles nodejs)
     # If the user installed an x86 version of NodeJS on an x64 system, the NodeJS installation will be found
     # in env:ProgramFiles(x86)
-    $NodePath = (Join-Path $env:ProgramFiles nodejs)
+    if ((Test-Path $NodePath) -ne $True) {
+        $NodePath = (Join-Path {env:ProgramFiles(x86)} nodejs)
+    }
 }
-$NpmPath = (Join-Path $NodePath "node_modules\npm")
 
-Write-Debug "Assuming npm in $NpmPath"
-
-if (Test-Path $NodePath)
-{
-    # Create tmp directory, delete files if they exist
-    $TempPath = "$env:temp\npm_upgrade"
-    if ((Test-Path $TempPath) -ne $True)
-    {
-        New-Item -ItemType Directory -Force -Path $TempPath
-    }
-
-    # Copy away .npmrc
-    $Npmrc = $False
-    if (Test-Path $NpmPath)
-    {
-        cd $NpmPath
-
-        if (Test-Path .npmrc)
-        {
-            $Npmrc = $True
-            Write-Debug "Saving .npmrc"
-            Copy-Item .npmrc $TempPath
-        }
-    }
-
-    # Upgrade npm
-    cd $NodePath
-    Write-Debug "Upgrading npm in $NodePath"
-    .\npm install npm@$version
-
-    # Copy .npmrc back
-    if ($Npmrc)
-    {
-        Write-Debug "Restoring .npmrc"
-        $TempFile = "$TempPath\.npmrc"
-        Copy-Item $TempFile $NpmPath -Force
-    }
-
-    "All done!"
-} else
-{
-    "Could not find NPM in $NpmPath - aborting upgrade"
-}
+UpdateNpm($NodePath)
