@@ -22,7 +22,7 @@ The tool will show you a list of all the published and available versions of npm
 ## Issues & Support
 Please do [report your issues on GitHub](https://github.com/felixrieseberg/npm-windows-upgrade/issues). There are a bunch of Windows versions, hundreds of different ways to install Node and npm, and it's likely that this script won't work with a few of them. If you run into trouble and need npm upgraded as soon as possible, [please follow the manual instructions](https://github.com/npm/npm/wiki/Troubleshooting#upgrading-on-windows).
 
-This tool was made by Microsoft with :heart: for npm and Node, but it is provided "as is", without warranty of any kind, express or
+This tool was made by Microsoft with :heart: for npm and Node, but it is provided "as is", without warranty of any kind, expressed or
 implied. For details, please consult the `LICENSE` file.
 
 ## Contributing
