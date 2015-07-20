@@ -108,7 +108,15 @@ if ((Test-Path $AssumedNpmPath) -ne $True)
     # If the user installed an x86 version of NodeJS on an x64 system, the NodeJS installation will be found
     # in env:ProgramFiles(x86)
     if ((Test-Path $NodePath) -ne $True) {
-        $NodePath = (Join-Path {env:ProgramFiles(x86)} nodejs)
+        if (Test-Path "Env:ProgramFiles(x86)")
+        {
+            $NodePath = (Join-Path {env:ProgramFiles(x86)} nodejs)
+        }
+        else
+        {
+            "We could not find npm - aborting upgrade"
+            return
+        }
     }
 }
 
