@@ -217,7 +217,7 @@ inquirer.prompt({
         if (!isUnrestricted) {
             console.log(chalk.bold.red('Scripts cannot be executed on this system.'));
             console.log('To fix this issue, please run the command below as Administrator and try again:');
-            console.log('Set-ExecutionPolicy Unrestricted -Scope CurrentUser');
+            console.log('Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force');
             return;
         }
 

@@ -7,7 +7,7 @@ Upgrading npm on Windows requires manual steps to ensure that PowerShell/CMD fin
 First, ensure that you can execute scripts on your system by running the following command from an elevated command prompt (either PowerShell or CMD.exe). To run PowerShell as Administrator, click Start, search for PowerShell, right-click PowerShell and select `Run as Administrator`.
 
 ```
-Set-ExecutionPolicy Unrestricted -Scope CurrentUser
+Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 ```
 
 Then, to install and use this upgrader tool, run:
