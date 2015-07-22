@@ -110,7 +110,7 @@ if ((Test-Path $AssumedNpmPath) -ne $True)
     if ((Test-Path $NodePath) -ne $True) {
         if (Test-Path "Env:ProgramFiles(x86)")
         {
-            $NodePath = (Join-Path {env:ProgramFiles(x86)} nodejs)
+            $NodePath = (Join-Path ${env:ProgramFiles(x86)} nodejs)
         }
         else
         {
