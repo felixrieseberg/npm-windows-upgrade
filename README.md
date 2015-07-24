@@ -17,12 +17,20 @@ npm install -g npm-windows-upgrade
 npm-windows-upgrade
 ```
 
+The tool will show you a list of all the published and available versions of npm (including pre-release and beta versions). Choose the one you want to install and let it do its thing!
+
 #### Run with Parameters
+If you have trouble with the script, consider adding parameters manually. A common issue is that the script fails to find npm (and therefore doesn't know where to install it) - in that case, pass the location manually.
+
 ```
-npm-windows-upgrade --version:3.1.0 --npmPath:"C:\nodejs\node_m"
+npm-windows-upgrade --npmPath:"C:\nodejs"
 ```
 
-The tool will show you a list of all the published and available versions of npm (including pre-release and beta versions). Choose the one you want to install and let it do its thing!
+To manually specify a version to install, pass the `version` parameter:
+
+```
+npm-windows-upgrade --version:3.1.0
+```
 
 ## Issues & Support
 Please do [report your issues on GitHub](https://github.com/felixrieseberg/npm-windows-upgrade/issues). There are a bunch of Windows versions, hundreds of different ways to install Node and npm, and it's likely that this script won't work with a few of them. If you run into trouble and need npm upgraded as soon as possible, [please follow the manual instructions](https://github.com/npm/npm/wiki/Troubleshooting#upgrading-on-windows).
