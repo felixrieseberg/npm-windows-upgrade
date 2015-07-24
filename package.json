@@ -31,14 +31,14 @@
   ],
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-jscs": "^1.5.0",
-    "load-grunt-tasks": "^1.0.0"
+    "grunt-contrib-jshint": "^0.11.2",
+    "grunt-jscs": "^1.8.0",
+    "load-grunt-tasks": "^3.2.0"
   },
   "dependencies": {
-    "chalk": "^1.0.0",
+    "chalk": "^1.1.0",
     "cli-spinner": "^0.2.1",
-    "inquirer": "^0.8.5",
+    "inquirer": "^0.9.0",
     "prompt": "^0.2.14"
   }
 }
