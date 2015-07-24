@@ -114,7 +114,9 @@ if ((Test-Path $AssumedNpmPath) -ne $True)
         }
         else
         {
-            "We could not find npm - aborting upgrade"
+            "We could not find npm - aborting upgrade."
+            "To manually tell npm-version-upgrade where to install npm,"
+            'run this script with the parameter --npmPath:"C:\MyNPMLocation\"'
             return
         }
     }

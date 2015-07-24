@@ -17,6 +17,11 @@ npm install -g npm-windows-upgrade
 npm-windows-upgrade
 ```
 
+#### Run with Parameters
+```
+npm-windows-upgrade --version:3.1.0 --npmPath:"C:\nodejs\node_m"
+```
+
 The tool will show you a list of all the published and available versions of npm (including pre-release and beta versions). Choose the one you want to install and let it do its thing!
 
 ## Issues & Support

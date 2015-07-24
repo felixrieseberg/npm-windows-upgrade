@@ -2,6 +2,7 @@
 
 var spawn = require('child_process').spawn,
     exec = require('child_process').exec,
+    fs = require('fs'),
     path = require('path'),
     chalk = require('chalk'),
     inquirer = require('inquirer'),
@@ -94,11 +95,35 @@ function getNPMVersion(cb) {
 
 /**
  * Attempts to get the current installation location of npm by looking up the global prefix.
+ * @param  {string} npmPath - Input path if given by user
  * @param  {Function} cb - Callback
  * @return {string}      - NodeJS installation path
  */
-function getNodePath(cb) {
-    var nodePath;
+function getNodePath(npmPath, cb) {
+    var nodePath, stats, error;
+
+    if (npmPath) {
+        try {
+            stats = fs.lstatSync(npmPath);
+            if (!stats.isDirectory()) {
+                error = 'Given path ' + npmPath + ' is not a valid directory.\n';
+                error += 'Please ensure that you added the correct path and try again!';
+                console.error(chalk.bold.red(error));
+                return cb(false);
+            } else {
+                return cb(npmPath);
+            }
+        }
+        catch (e) {
+            if (e) {
+                error = 'Given path ' + npmPath + ' is not a valid directory.\n';
+                error += 'Please ensure that you added the correct path and try again!';
+                console.error(error);
+                return cb(false);
+            }
+        }
+        return;
+    }
 
     exec('npm config --global get prefix', function (err, stdout) {
         if (err) {
@@ -153,13 +178,17 @@ function checkExecutionPolicy(cb) {
  * The actual upgrade method, utilizing all the helper methods above
  * @param  {string} version - Version that should be installed
  */
-function upgradeNPM(version) {
+function upgradeNPM(version, npmPath) {
     var spinner = new Spinner('Upgrading.. %s'),
         info;
 
     spinner.start();
 
-    getNodePath(function (nodePath) {
+    getNodePath(npmPath, function (nodePath) {
+        if (!nodePath) {
+            return spinner.stop(false);
+        }
+
         runPowershell(version, nodePath, function (stderr, stdout) {
             spinner.stop(false);
             console.log('\n');
@@ -222,14 +251,19 @@ inquirer.prompt({
         }
 
         checkForInternet(function (isOnline) {
-            var version = (args[2] && args[2].indexOf('--version:') > -1) ? args[2].slice(10) : null;
+            var version, npmPath;
+
+            for (var i = 1; i < args.length; i = i + 1) {
+                version = (args[i].indexOf('--version:') > -1) ? args[i].slice(10) : version;
+                npmPath = (args[i].indexOf('--npmPath:') > -1) ? args[i].slice(10) : npmPath;
+            };
 
             if (!isOnline) {
                 return console.err(chalk.bold.red('We have trouble connecting to the Internet. Aborting.'));
             }
 
             if (version) {
-                upgradeNPM(version);
+                upgradeNPM(version, npmPath);
             } else {
                 getAvailableNPMVersions(function (versions) {
                     var versionList = [{
@@ -244,7 +278,7 @@ inquirer.prompt({
                             return console.err(chalk.bold.red('Could not determine version that should be installed. Aborting'));
                         }
 
-                        upgradeNPM(answer.version);
+                        upgradeNPM(answer.version, npmPath);
                     });
                 });
             }
