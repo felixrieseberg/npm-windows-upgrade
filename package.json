@@ -1,6 +1,6 @@
 {
   "name": "npm-windows-upgrade",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "private": false,
   "preferGlobal": "true",
   "bin": {
