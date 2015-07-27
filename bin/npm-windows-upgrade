@@ -23,7 +23,7 @@ function runPowershell(version, nodePath, cb) {
     var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
         specialArgs = nodePath === null ?
             '& {& \'' + scriptPath + '\' -version \'' + version + '\' }' :
-            '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath \'' + nodePath + '\' }',
+            '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath "' + nodePath + '" }',
         psArgs = ['-NoProfile', '-NoLogo', specialArgs],
         child = spawn('powershell.exe', psArgs),
         stdout = [], stderr = [];
@@ -156,11 +156,11 @@ function getNodePath(npmPath, cb) {
             }
 
             // Expecting npm.cmd path in stdout[0]
-            cmdPath = stdout[0];
-            if (cmdPath && cmdPath.indexOf('nodejs') && cmdPath.slice(cmdPath.length - 7) === 'npm.cmd') {
+            cmdPath = stdout[0].trim();
+            if (cmdPath && cmdPath.slice(cmdPath.length - 7) === 'npm.cmd') {
                 // We're probably installed in a location like C:\Program Files\nodejs\npm.cmd,
                 // meaning that we should not use the global prefix installation location
-                nodePath = cmdPath.slice(0, cmdPath.length - 7);
+                nodePath = cmdPath.slice(0, cmdPath.length - 8);
                 return _cb(nodePath);
             } else {
                 // We're probably installed in %AppData%, but let's make sure

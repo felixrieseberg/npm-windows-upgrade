@@ -81,18 +81,10 @@ function UpdateNpm($PassedNodePath)
 
 if (!(IsAdministrator))
 {
-    if (IsUacEnabled)
     {
-        "We need to relaunch this script as administrator"
-        [string[]]$argList = @('-NoProfile', '-NoExit', '-File', $MyInvocation.MyCommand.Path)
-        $argList += $MyInvocation.BoundParameters.GetEnumerator() | Foreach {"-$($_.Key)", "$($_.Value)"}
-        $argList += $MyInvocation.UnboundArguments
-        Start-Process PowerShell.exe -Verb Runas -WorkingDirectory $pwd -ArgumentList $argList
-        return
-    }
-    else
-    {
-        "You must be administrator to run this script"
+        "Please restart this script from an administrative PowerShell!"
+        "NPM cannot be upgraded without administrative rights. To run PowerShell as Administrator,"
+        "right-click PowerShell and select 'Run as Administrator'."
         return
     }
 }
