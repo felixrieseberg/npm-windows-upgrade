@@ -125,15 +125,53 @@ function getNodePath(npmPath, cb) {
         return;
     }
 
-    exec('npm config --global get prefix', function (err, stdout) {
-        if (err) {
-            console.log('Could not determine NodeJS location, will default to a Program Files directory.');
-            cb(null);
-        } else {
-            nodePath = stdout.replace(/\n/, '');
-            cb(nodePath);
-        }
-    });
+    function getFromConfig(_cb) {
+        exec('npm config --global get prefix', function (err, stdout) {
+            if (err) {
+                console.log('Could not determine NodeJS location, will default to a Program Files directory.');
+                _cb(null);
+            } else {
+                nodePath = stdout.replace(/\n/, '');
+                _cb(nodePath);
+            }
+        });
+    }
+
+    function getFromCommand(_cb) {
+        var spawnOptions = ['-NoProfile', '-NoLogo', 'Get-Command npm | Select-Object -ExpandProperty Definition'],
+            child = spawn('powershell.exe', spawnOptions),
+            stdout = [], stderr = [], cmdPath;
+
+        child.stdout.on('data', function (data) {
+            stdout.push(data.toString());
+        });
+
+        child.stderr.on('data', function (data) {
+            stderr.push(data.toString());
+        });
+
+        child.on('exit', function () {
+            if (stderr.length > 0) {
+                return getFromConfig(_cb);
+            }
+
+            // Expecting npm.cmd path in stdout[0]
+            cmdPath = stdout[0];
+            if (cmdPath && cmdPath.indexOf('nodejs') && cmdPath.slice(cmdPath.length - 7) === 'npm.cmd') {
+                // We're probably installed in a location like C:\Program Files\nodejs\npm.cmd,
+                // meaning that we should not use the global prefix installation location
+                nodePath = cmdPath.slice(0, cmdPath.length - 7);
+                return _cb(nodePath);
+            } else {
+                // We're probably installed in %AppData%, but let's make sure
+                return getFromConfig(_cb);
+            }
+        });
+
+        child.stdin.end();
+    }
+
+    getFromCommand(cb);
 }
 
 /**
@@ -251,12 +289,12 @@ inquirer.prompt({
         }
 
         checkForInternet(function (isOnline) {
-            var version, npmPath;
+            var version, npmPath, i;
 
-            for (var i = 1; i < args.length; i = i + 1) {
+            for (i = 1; i < args.length; i = i + 1) {
                 version = (args[i].indexOf('--version:') > -1) ? args[i].slice(10) : version;
                 npmPath = (args[i].indexOf('--npmPath:') > -1) ? args[i].slice(10) : npmPath;
-            };
+            }
 
             if (!isOnline) {
                 return console.err(chalk.bold.red('We have trouble connecting to the Internet. Aborting.'));
