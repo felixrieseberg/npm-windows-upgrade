@@ -232,16 +232,10 @@ function upgradeNPM(version, npmPath) {
             console.log('\n');
 
             // If we failed to elevate to administrative rights, we have to abort.
-            if (stdout[0] && stdout[0].indexOf('You must be administrator to run this script') > -1) {
-                info = 'Upgrade aborted: You must be administrator to run this script. Upgrade aborted.';
+            if (stdout[0] && stdout[0].indexOf('Please restart this script from an administrative PowerShell!') > -1) {
+                info = 'NPM cannot be upgraded without administrative rights. To run PowerShell as Administrator,\n';
+                info += "right-click PowerShell and select 'Run as Administrator'.";
                 return console.log(chalk.bold.red(info));
-            }
-
-            // If PowerShell had to relaunch as Administrator, we'll already be here - without usable output.
-            if (stdout[0] && stdout[0].indexOf('We need to relaunch this script as administrator') > -1) {
-                info = 'Since this script was run without administrative rights, we had to launch a new window.\n';
-                info += 'Please check it for additional output.';
-                return console.log(chalk.bold.yellow(info));
             }
 
             // Confirm that the upgrade actually worked
