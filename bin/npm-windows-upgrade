@@ -211,7 +211,6 @@ function checkExecutionPolicy(cb) {
     child.stdin.end();
 }
 
-// Upgrade Method
 /**
  * The actual upgrade method, utilizing all the helper methods above
  * @param  {string} version - Version that should be installed
@@ -256,64 +255,83 @@ function upgradeNPM(version, npmPath) {
     });
 }
 
+/**
+ * Prepares the upgrade by checking execution policy, internet, and
+ * potentially asking for a version.
+ * @return {[type]} [description]
+ */
+function prepareUpgrade() {
+    checkExecutionPolicy(function (isUnrestricted) {
+    if (!isUnrestricted) {
+        console.log(chalk.bold.red('Scripts cannot be executed on this system.'));
+        console.log('To fix this issue, please run the command below as Administrator and try again:');
+        console.log('Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force');
+        return;
+    }
+
+    checkForInternet(function (isOnline) {
+        var version, npmPath, i;
+
+        for (i = 1; i < args.length; i = i + 1) {
+            version = (args[i].indexOf('--version:') > -1) ? args[i].slice(10) : version;
+            npmPath = (args[i].indexOf('--npmPath:') > -1) ? args[i].slice(10) : npmPath;
+        }
+
+        if (!isOnline) {
+            return console.err(chalk.bold.red('We have trouble connecting to the Internet. Aborting.'));
+        }
+
+        if (version) {
+            upgradeNPM(version, npmPath);
+        } else {
+            getAvailableNPMVersions(function (versions) {
+                var versionList = [{
+                    type: 'list',
+                    name: 'version',
+                    message: 'Which version do you want to install?',
+                    choices: versions.reverse()
+                }];
+
+                inquirer.prompt(versionList, function (answer) {
+                    if (!answer.version) {
+                        return console.err(chalk.bold.red('Could not determine version that should be installed. Aborting'));
+                    }
+
+                    upgradeNPM(answer.version, npmPath);
+                });
+            });
+        }
+    });
+});
+}
+
 // Check OS
 if (!isWin) {
     throw('This script upgrades npm on Windows, but the OS is not Windows.');
 }
 
-// Print version
-console.log(chalk.yellow.bold('npm-windows-upgrade ' + package.version));
-
 // Execute
-inquirer.prompt({
-    type: 'confirm',
-    name: 'c',
-    message: 'This tool will upgrade npm. Do you want to continue?'
-}, function (response) {
-    if (!response.c) {
-        return console.log(chalk.bold.green('Well then, we\'re done here. Have a nice day!'));
-    }
+var noPrompt = false, i;
 
-    checkExecutionPolicy(function (isUnrestricted) {
-        if (!isUnrestricted) {
-            console.log(chalk.bold.red('Scripts cannot be executed on this system.'));
-            console.log('To fix this issue, please run the command below as Administrator and try again:');
-            console.log('Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force');
-            return;
+for (i = 1; i < args.length; i = i + 1) {
+    noPrompt = (args[i].indexOf('--no-prompt') > -1) ? true : noPrompt;
+}
+
+if (!noPrompt) {
+    // Print version
+    console.log(chalk.yellow.bold('npm-windows-upgrade ' + package.version));
+
+    inquirer.prompt({
+        type: 'confirm',
+        name: 'c',
+        message: 'This tool will upgrade npm. Do you want to continue?'
+    }, function (response) {
+        if (!response.c) {
+            return console.log(chalk.bold.green('Well then, we\'re done here. Have a nice day!'));
         }
 
-        checkForInternet(function (isOnline) {
-            var version, npmPath, i;
-
-            for (i = 1; i < args.length; i = i + 1) {
-                version = (args[i].indexOf('--version:') > -1) ? args[i].slice(10) : version;
-                npmPath = (args[i].indexOf('--npmPath:') > -1) ? args[i].slice(10) : npmPath;
-            }
-
-            if (!isOnline) {
-                return console.err(chalk.bold.red('We have trouble connecting to the Internet. Aborting.'));
-            }
-
-            if (version) {
-                upgradeNPM(version, npmPath);
-            } else {
-                getAvailableNPMVersions(function (versions) {
-                    var versionList = [{
-                        type: 'list',
-                        name: 'version',
-                        message: 'Which version do you want to install?',
-                        choices: versions.reverse()
-                    }];
-
-                    inquirer.prompt(versionList, function (answer) {
-                        if (!answer.version) {
-                            return console.err(chalk.bold.red('Could not determine version that should be installed. Aborting'));
-                        }
-
-                        upgradeNPM(answer.version, npmPath);
-                    });
-                });
-            }
-        });
+        prepareUpgrade();
     });
-});
+} else {
+    prepareUpgrade();
+}
