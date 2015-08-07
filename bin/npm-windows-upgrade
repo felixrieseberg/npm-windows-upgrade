@@ -280,7 +280,7 @@ function prepareUpgrade() {
 
         for (i = 1; i < args.length; i = i + 1) {
             version = (args[i].indexOf('--version:') > -1) ? args[i].slice(10) : version;
-            npmPath = (args[i].indexOf('--npmPath:') > -1) ? args[i].slice(10) : npmPath;
+            npmPath = (args[i].indexOf('--npm-path:') > -1) ? args[i].slice(11) : npmPath;
         }
 
         if (!isOnline) {
@@ -317,13 +317,29 @@ if (!isWin) {
 }
 
 // Execute
-var noPrompt = false, i;
+var noPrompt = false,
+    help = false, i;
 
 for (i = 1; i < args.length; i = i + 1) {
     noPrompt = (args[i].indexOf('--no-prompt') > -1) ? true : noPrompt;
+    help = (args[i].indexOf('--help') > -1) ? true : help;
 }
 
-if (!noPrompt) {
+if (help) {
+    help = '\n';
+    help += 'Default usage: npm-windows-upgrade\n';
+    help += '\n';
+    help += 'Optional parameters:\n'
+    help += '--version (npm version to upgrade to, usage: --version:3.1.0)\n';
+    help += '--npm-path (path to upgrade npm in, usage: --npmPath:"C:\\nodejs")\n';
+    help += '--no-prompt (bypasses the initial prompt)\n';
+    help += '--no-dns-check (bypasses the internet check)\n';
+
+    console.log(chalk.yellow.bold('npm-windows-upgrade ' + package.version));
+    console.log(help);
+} else if (noPrompt) {
+    prepareUpgrade();
+} else {
     // Print version
     console.log(chalk.yellow.bold('npm-windows-upgrade ' + package.version));
 
@@ -338,6 +354,4 @@ if (!noPrompt) {
 
         prepareUpgrade();
     });
-} else {
-    prepareUpgrade();
 }

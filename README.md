@@ -24,7 +24,7 @@ The tool will show you a list of all the published and available versions of npm
 If you have trouble with the script, consider adding parameters manually. A common issue is that the script fails to find npm (and therefore doesn't know where to install it) - in that case, pass the location manually.
 
 ```
-npm-windows-upgrade --npmPath:"C:\nodejs"
+npm-windows-upgrade --npm-path:"C:\nodejs"
 ```
 
 To manually specify a version to install, pass the `version` parameter:
@@ -32,6 +32,8 @@ To manually specify a version to install, pass the `version` parameter:
 ```
 npm-windows-upgrade --version:3.1.0
 ```
+
+To override the internet connection check, pass `--no-dns-check`. To disable the initial prompt, pass `--no-prompt`.
 
 ### Issues & Support
 Please do [report your issues on GitHub](https://github.com/felixrieseberg/npm-windows-upgrade/issues). There are a bunch of Windows versions, hundreds of different ways to install Node and npm, and it's likely that this script won't work with a few of them. If you run into trouble and need npm upgraded as soon as possible, [please follow the manual instructions](https://github.com/npm/npm/wiki/Troubleshooting#upgrading-on-windows).
