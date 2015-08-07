@@ -50,6 +50,12 @@ function runPowershell(version, nodePath, cb) {
  * @return {boolean}     - True if lookup succeeded, false if it didn't
  */
 function checkForInternet(cb) {
+    for (var i = 1; i < args.length; i = i + 1) {
+        if (args[i].indexOf('--no-dns-check') > -1) {
+            return cb(true);
+        }
+    }
+
     require('dns').lookup('microsoft.com', function (err) {
         if (err && err.code === 'ENOTFOUND') {
             cb(false);
