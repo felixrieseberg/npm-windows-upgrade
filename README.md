@@ -1,5 +1,6 @@
 ## Upgrade npm on Windows 
-<a href="http://badge.fury.io/js/npm-windows-upgrade"><img src="https://badge.fury.io/js/npm-windows-upgrade.svg" alt="npm version" height="18"></a> <img src="https://david-dm.org/felixrieseberg/npm-windows-upgrade.svg" alt="dependencies" height="18px"> <img src="https://img.shields.io/npm/dm/npm-windows-upgrade.svg" height="18px" />
+<a href="https://ci.appveyor.com/project/felixrieseberg/npm-windows-upgrade/branch/master"><img src="https://ci.appveyor.com/api/projects/status/8mk8qvno71xt30if/branch/master?svg=true" alt="windows build status" height="18" /></a>
+<a href="http://badge.fury.io/js/npm-windows-upgrade"><img src="https://badge.fury.io/js/npm-windows-upgrade.svg" alt="npm version" height="18"></a> <a href="https://david-dm.org/felixrieseberg/npm-windows-upgrade"><img src="https://david-dm.org/felixrieseberg/npm-windows-upgrade.svg" alt="dependencies" height="18px"></a> <img src="https://img.shields.io/npm/dm/npm-windows-upgrade.svg" height="18px" />
 Upgrading npm on Windows requires manual steps to ensure that PowerShell/CMD find the new version of npm. This is a small tool made by Microsoft DX engineers with :heart: for npm and Node, reducing the process to a simple command.
 
 ![](https://raw.githubusercontent.com/felixrieseberg/npm-windows-upgrade/gh-pages/screenshot.png)
