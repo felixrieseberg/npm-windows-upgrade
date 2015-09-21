@@ -255,7 +255,8 @@ function upgradeNPM(version, npmPath) {
                 info += 'Please consider reporting your trouble to http://aka.ms/npm-issues.';
                 console.log(chalk.bold.red(info));
                 console.log('Here is the output from the upgrader script:');
-                return console.log(stdout, stderr);
+                console.log(stdout, stderr);
+                return process.exit(1)
             });
         });
     });
