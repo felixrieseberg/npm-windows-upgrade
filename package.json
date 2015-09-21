@@ -5,7 +5,7 @@
     "!darwin",
     "!linux"
   ],
-  "version": "0.4.2",
+  "version": "0.4.3",
   "private": false,
   "preferGlobal": "true",
   "bin": {
