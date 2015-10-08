@@ -14,12 +14,14 @@ var versions = require('./versions'),
     powershell = require('./powershell'),
     npmpathfinder = require('./npmpathfinder');
 
+var noPrompt = false;
+
 /**
  * Prepares the upgrade by checking execution policy, internet, and
  * checking for parameters.
  */
 async function prepareUpgrade() {
-    var noPrompt, help, npmPath, chosenVersion;
+    var help, npmPath, chosenVersion;
 
     // Print version
     console.log(chalk.yellow.bold('npm-windows-upgrade ' + versions.nwuVersion));
@@ -79,12 +81,16 @@ async function prepareUpgrade() {
  * @param  {string} npmPath - Version that should be installed
  */
 async function upgrade(version, npmPath) {
-    var spinner = new Spinner('Upgrading... %s');
-    spinner.start();
+    if (!noPrompt) {
+        var spinner = new Spinner('Upgrading... %s');
+        spinner.start();
+    } else {
+        console.log('Starting upgrade...');
+    }
 
     npmpathfinder(npmPath).then((confirmedPath) => {
         powershell.runUpgrade(version, npmPath).then(async function (output) {
-            spinner.stop(false);
+            if (!noPrompt) spinner.stop(false);
             console.log('\n');
 
             // If we failed to elevate to administrative rights, we have to abort.
