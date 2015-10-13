@@ -89,7 +89,7 @@ async function upgrade(version, npmPath) {
     }
 
     npmpathfinder(npmPath).then((confirmedPath) => {
-        powershell.runUpgrade(version, npmPath).then(async function (output) {
+        powershell.runUpgrade(version, confirmedPath).then(async function (output) {
             if (!noPrompt) spinner.stop(false);
             console.log('\n');
 
