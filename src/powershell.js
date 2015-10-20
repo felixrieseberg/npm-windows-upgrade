@@ -9,14 +9,20 @@ var spawn = require('child_process').spawn,
  * @return {stderr[], stdout[]}   - stderr and stdout received from the PS1 process
  */
 function run(version, npmPath) {
-    return new RSVP.Promise(function (resolve) {
+    return new RSVP.Promise(function (resolve, reject) {
         var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
             specialArgs = npmPath === null ? '& {& \'' + scriptPath + '\' -version \'' + version + '\' }' : '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath "' + npmPath + '" }',
             psArgs = ['-NoProfile', '-NoLogo', specialArgs],
-            child = spawn('powershell.exe', psArgs),
             stdout = [],
-            stderr = [];
+            stderr = [],
+            child;
 
+        try {
+            child = spawn('powershell.exe', psArgs);
+        } catch (error) {
+            reject(error);
+        }
+        
         child.stdout.on('data', function (data) {
             stdout.push(data.toString());
         });
@@ -41,10 +47,13 @@ function run(version, npmPath) {
  */
 function checkExecutionPolicy() {
     return new RSVP.Promise(function (resolve, reject) {
-        var child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', 'Get-ExecutionPolicy']),
-            output = [],
-            unrestricted,
-            i;
+        var output = [], unrestricted, child, i;
+
+        try {
+            child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', 'Get-ExecutionPolicy']);
+        } catch (error) {
+            reject(error);
+        }
 
         child.stdout.on('data', function (data) {
             output.push(data.toString());
