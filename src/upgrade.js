@@ -45,14 +45,13 @@ async function prepareUpgrade() {
     }
 
     // Check Execution Policy
-    try {
-        let canExecute = await powershell.checkExecutionPolicy();
-    } catch (error) {
+    let canExecute = await powershell.checkExecutionPolicy();
+    if (canExecute.error) {
         console.log(chalk.bold.red('Encountered an error while checking the system\'s execution policy. The error was:'));
-        console.log(error);
+        console.log(canExecute.error);
         return;
     }
-    
+
     if (!canExecute) {
         console.log(chalk.bold.red('Scripts cannot be executed on this system.'));
         console.log(chalk.green('To fix, run the command below as Administrator in PowerShell and try again:'));

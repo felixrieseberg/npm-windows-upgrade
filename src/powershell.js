@@ -22,7 +22,7 @@ function run(version, npmPath) {
         } catch (error) {
             reject(error);
         }
-        
+
         child.stdout.on('data', function (data) {
             stdout.push(data.toString());
         });
@@ -52,7 +52,8 @@ function checkExecutionPolicy() {
         try {
             child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', 'Get-ExecutionPolicy']);
         } catch (error) {
-            reject(error);
+            // This is dirty, but the best way for us to try/catch right now
+            resolve({error: error});
         }
 
         child.stdout.on('data', function (data) {
