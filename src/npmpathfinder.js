@@ -1,11 +1,10 @@
 var spawn = require('child_process').spawn,
     exec = require('child_process').exec,
     fs = require('fs'),
-    RSVP = require('rsvp'),
     path = require('path');
 
 function _getFromConfig() {
-    return new RSVP.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         exec('npm config --global get prefix', function (err, stdout) {
             if (err) {
                 console.log('Could not determine NodeJS location, will default to a Program Files directory.');
@@ -19,7 +18,7 @@ function _getFromConfig() {
 }
 
 function _getFromCommand() {
-    return new RSVP.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var spawnOptions = ['-NoProfile', '-NoLogo', 'Get-Command npm | Select-Object -ExpandProperty Definition'],
             child = spawn('powershell.exe', spawnOptions),
             stdout = [],

@@ -3,7 +3,6 @@
 var spawn = require('child_process').spawn,
     exec = require('child_process').exec,
     fs = require('fs'),
-    RSVP = require('rsvp'),
     path = require('path'),
     chalk = require('chalk'),
     inquirer = require('inquirer'),
@@ -146,7 +145,7 @@ function displayHelp() {
  * Asks the user for confirmation whether or not he/she wants to upgrade
  */
 function askForConfirmation() {
-    return new RSVP.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         inquirer.prompt({
             type: 'confirm',
             name: 'c',
@@ -167,7 +166,7 @@ function askForConfirmation() {
  * @return {boolean} - True if lookup succeeded (or if we skip the test), false if it didn't
  */
 function checkForInternet() {
-    return new RSVP.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         for (var i = 1; i < process.argv.length; i = i + 1) {
             if (process.argv[i].indexOf('--no-dns-check') > -1) {
                 resolve(true);

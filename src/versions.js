@@ -3,7 +3,6 @@
 var spawn = require('child_process').spawn,
     exec = require('child_process').exec,
     fs = require('fs'),
-    RSVP = require('rsvp'),
     path = require('path'),
     chalk = require('chalk'),
     inquirer = require('inquirer'),
@@ -15,7 +14,7 @@ var spawn = require('child_process').spawn,
  * @return {string}      - Installed version of npm
  */
 function getInstalledNPMVersion() {
-    return new RSVP.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var nodeVersion;
 
         exec('npm -v', function (err, stdout) {
@@ -34,7 +33,7 @@ function getInstalledNPMVersion() {
  * @return {versions[]}  - Array of the available versions
  */
 function getAvailableNPMVersions() {
-    return new RSVP.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         exec('npm view npm versions --json', function (err, stdout) {
             if (err) {
                 let error = 'We could not show latest available versions. Try running this script again ';

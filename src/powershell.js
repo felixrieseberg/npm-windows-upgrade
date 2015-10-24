@@ -1,5 +1,4 @@
 var spawn = require('child_process').spawn,
-    RSVP = require('rsvp'),
     path = require('path');
 
 /**
@@ -9,7 +8,7 @@ var spawn = require('child_process').spawn,
  * @return {stderr[], stdout[]}   - stderr and stdout received from the PS1 process
  */
 function run(version, npmPath) {
-    return new RSVP.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
             specialArgs = npmPath === null ? '& {& \'' + scriptPath + '\' -version \'' + version + '\' }' : '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath "' + npmPath + '" }',
             psArgs = ['-NoProfile', '-NoLogo', specialArgs],
@@ -46,7 +45,7 @@ function run(version, npmPath) {
  * @return {[type]}      - True if unrestricted, false if it isn't
  */
 function checkExecutionPolicy() {
-    return new RSVP.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         var output = [], unrestricted, child, i;
 
         try {
