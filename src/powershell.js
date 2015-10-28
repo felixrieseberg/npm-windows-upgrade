@@ -8,7 +8,7 @@ var spawn = require('child_process').spawn,
  * @param  {string}   npmPath    - Path to Node installation (optional)
  * @return {stderr[], stdout[]}   - stderr and stdout received from the PS1 process
  */
-function run(version, npmPath) {
+function runUpgrade(version, npmPath) {
     return new Promise(function (resolve, reject) {
         var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
             specialArgs = npmPath === null ? '& {& \'' + scriptPath + '\' -version \'' + version + '\' }' : '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath "' + npmPath + '" }',
@@ -20,7 +20,7 @@ function run(version, npmPath) {
         try {
             child = spawn('powershell.exe', psArgs);
         } catch (error) {
-            reject(error);
+            return reject(error);
         }
 
         child.stdout.on('data', function (data) {
@@ -87,5 +87,5 @@ function checkExecutionPolicy() {
 
 module.exports = {
     checkExecutionPolicy: checkExecutionPolicy,
-    runUpgrade: run
+    runUpgrade: runUpgrade
 }

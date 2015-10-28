@@ -59,7 +59,7 @@ function _getFromCommand() {
 module.exports = function get(npmPath) {
     var stats, error;
 
-    return new RSVP.Promise(function (resolve, reject) {
+    return new Promise(function (resolve, reject) {
         if (npmPath) {
             try {
                 stats = fs.lstatSync(npmPath);

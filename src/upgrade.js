@@ -115,15 +115,37 @@ async function upgrade(version, npmPath) {
                 return console.log(chalk.bold.green(info));
             } else {
                 // Uh-oh, something didn't work as it should have.
-                info = 'You wanted to install npm ' + version + ', but the installed version is' + installedVersion + '.\n';
-                info += 'Please consider reporting your trouble to http://aka.ms/npm-issues.';
-                console.log(chalk.bold.red(info));
-                console.log('Here is the output from the upgrader script:');
-                console.log(stdout, output.stderr);
-                return process.exit(1);
+                return logError([output.stderr, stdout]);
             }
+        }).catch(function (error) {
+            return logError([error]);
         });
     });
+}
+
+/**
+Logs an error to console and exits the process with status code 1
+ * @param  {array} errors - An array with all erros to log
+*/
+function logError(...errors) {
+    // Uh-oh, something didn't work as it should have.
+    let info = 'You wanted to install npm ' + version + ', but the installed version is' + installedVersion + '.\n';
+        info += 'Please consider reporting your trouble to http://aka.ms/npm-issues.';
+
+    console.log(chalk.bold.red(info));
+    console.log('Here is the error:');
+
+    // If we just got an error string (we shouldn't, handle that)
+    if (!errors.length && typeof errors === 'string') {
+        console.log('\n' + errors + '\n');
+        return process.exit(1);
+    }
+
+    for (let i = 0; i < errors.length; i++) {
+        console.log('\n' + errors[i] + '\n');
+    }
+
+    return process.exit(1);
 }
 
 /**
