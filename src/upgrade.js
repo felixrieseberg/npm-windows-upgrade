@@ -6,6 +6,8 @@ var spawn = require('child_process').spawn,
     path = require('path'),
     chalk = require('chalk'),
     inquirer = require('inquirer'),
+    Promise = require('promise'),
+    regeneratorRuntime = require('regenerator-runtime-only'),
     Spinner = require('cli-spinner').Spinner;
 
 // Internal Modules

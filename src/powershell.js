@@ -1,5 +1,6 @@
 var spawn = require('child_process').spawn,
-    path = require('path');
+    path = require('path'),
+    Promise = require('promise');
 
 /**
  * Executes the PS1 script upgrading npm

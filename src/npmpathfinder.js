@@ -1,7 +1,8 @@
 var spawn = require('child_process').spawn,
     exec = require('child_process').exec,
     fs = require('fs'),
-    path = require('path');
+    path = require('path'),
+    Promise = require('promise');
 
 function _getFromConfig() {
     return new Promise(function (resolve, reject) {

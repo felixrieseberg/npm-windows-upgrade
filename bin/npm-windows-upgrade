@@ -1,7 +1,6 @@
 #! /usr/bin/env node
 
 var upgrader = require('../lib/upgrade');
-var polyfills = require('babel/polyfill');
 
 // Check OS
 if (!/^win/.test(process.platform)) {
