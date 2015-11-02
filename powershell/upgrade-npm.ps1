@@ -45,17 +45,17 @@ function UpdateNpm($PassedNodePath)
             New-Item -ItemType Directory -Force -Path $TempPath
         }
 
-        # Copy away .npmrc
+        # Copy away npmrc
         $Npmrc = $False
         if (Test-Path $NpmPath)
         {
             cd $NpmPath
 
-            if (Test-Path .npmrc)
+            if (Test-Path npmrc)
             {
                 $Npmrc = $True
-                Write-Debug "Saving .npmrc"
-                Copy-Item .npmrc $TempPath
+                Write-Debug "Saving npmrc"
+                Copy-Item npmrc $TempPath
             }
         }
 
@@ -64,11 +64,11 @@ function UpdateNpm($PassedNodePath)
         Write-Debug "Upgrading npm in $PassedNodePath"
         .\npm install npm@$version
 
-        # Copy .npmrc back
+        # Copy npmrc back
         if ($Npmrc)
         {
-            Write-Debug "Restoring .npmrc"
-            $TempFile = "$TempPath\.npmrc"
+            Write-Debug "Restoring npmrc"
+            $TempFile = "$TempPath\npmrc"
             Copy-Item $TempFile $NpmPath -Force
         }
 
