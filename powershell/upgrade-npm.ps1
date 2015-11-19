@@ -91,14 +91,16 @@ if (!(IsAdministrator))
 # Upgrade
 # ---------------------------------------------------------------------------------------------------------
 $AssumedNpmPath = (Join-Path $NodePath "node_modules\npm")
+$AssumedPathExists = (Test-Path $AssumedNpmPath -ErrorAction SilentlyContinue)
 
-if ((Test-Path $AssumedNpmPath) -ne $True)
+if ($AssumedPathExists -ne $True)
 {
     $NodePath = (Join-Path $env:ProgramFiles nodejs)
+    $NodePathExists = (Test-Path $NodePath -ErrorAction SilentlyContinue)
     # If the user installed an x86 version of NodeJS on an x64 system, the NodeJS installation will be found
     # in env:ProgramFiles(x86)
-    if ((Test-Path $NodePath) -ne $True) {
-        if (Test-Path "Env:ProgramFiles(x86)")
+    if ($NodePathExists -ne $True) {
+        if (Test-Path "Env:ProgramFiles(x86)" -ErrorAction SilentlyContinue)
         {
             $NodePath = (Join-Path ${env:ProgramFiles(x86)} nodejs)
         }
