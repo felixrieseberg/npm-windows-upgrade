@@ -31,6 +31,25 @@ function IsUacEnabled
     (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System).EnableLua -ne 0
 }
 
+function EnsurePath
+{
+    # Is %appdata%/npm part of the path?
+    if ($env:Path -NotLike '*%appdata%\npm*')
+    {
+        $env:Path = "%appdata%\npm;" + $env:Path
+    } elseif ($env:Path -Like '*nodejs*')
+    {
+        $npmOnPathIndex = $env:Path.IndexOf("%appdata%\npm")
+        $nodeOnPathIndex = $env:Path.IndexOf("nodejs")
+        
+        # If NodeJS is on the path before npm, move npm up
+        if ($npmOnPathIndex > $nodeOnPathIndex)
+        {
+            $env:Path = "%appdata%\npm;" + $env:Path
+        }
+    }
+}
+
 function UpdateNpm($PassedNodePath)
 {
     $NpmPath = (Join-Path $PassedNodePath "node_modules\npm")
@@ -114,4 +133,5 @@ if ($AssumedPathExists -ne $True)
     }
 }
 
+EnsurePath;
 UpdateNpm($NodePath)
