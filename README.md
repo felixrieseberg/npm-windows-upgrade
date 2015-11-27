@@ -42,6 +42,9 @@ Please do [report your issues on GitHub](https://github.com/felixrieseberg/npm-w
 This tool was made by Microsoft with :heart: for npm and Node, but it is provided "as is", without warranty of any kind, expressed or
 implied. For details, please consult the `LICENSE` file.
 
+### More Useful Node.js Stuff
+Microsoft is working hard to make sure that our users have the best possible experience with Node.js. For a helpful set of content that makes it easier to avoid any potential gotchas, [go check out our Node.js Guidelines](https://github.com/microsoft/nodejs-guidelines) - a collection of tips and advanced best practices!
+
 ### Contributing
 Contributions are extremely welcome! For JavaScript code, please run `grunt test` to check your code against JSCS and JSHint. There's no formal coding guideline for the PowerShell pieces of this tool, but do write code that is commented and comprehensible.
 
