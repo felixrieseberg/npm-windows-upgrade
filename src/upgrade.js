@@ -15,35 +15,21 @@ var versions = require('./versions'),
     powershell = require('./powershell'),
     npmpathfinder = require('./npmpathfinder');
 
-var noPrompt = false;
+var program;
 
 /**
  * Prepares the upgrade by checking execution policy, internet, and
  * checking for parameters.
  */
-async function prepareUpgrade() {
-    var help, npmPath, chosenVersion;
+async function prepareUpgrade(_program) {
+    // Set program reference
+    program = _program;
 
     // Print version
     console.log(chalk.yellow.bold('npm-windows-upgrade ' + versions.nwuVersion));
 
-    // Check for command line arguments
-    for (let i = 1; i < process.argv.length; i = i + 1) {
-        noPrompt = process.argv[i].indexOf('--no-prompt') > -1 ? true : noPrompt;
-        help = process.argv[i].indexOf('--help') > -1 ? true : help;
-        npmPath = process.argv[i].indexOf('--npm-path:') > -1 ? process.argv[i].slice(11) : npmPath;
-        chosenVersion = process.argv[i].indexOf('--version:') > -1 ? process.argv[i].slice(10) : chosenVersion;
-    }
-
-    // See if the user is just calling for help
-    if (help) {
-        return displayHelp();
-    }
-
     // Let's make sure that the user wants to upgrade
-    if (!noPrompt && !(await askForConfirmation())) {
-        return;
-    }
+    if (program.prompt && !(await askForConfirmation())) return;
 
     // Check Execution Policy
     let canExecute = await powershell.checkExecutionPolicy();
@@ -67,7 +53,7 @@ async function prepareUpgrade() {
     }
 
     // Let's check our version
-    if (!chosenVersion) {
+    if (!program.npmVersion) {
         let availableVersions = await versions.getAvailableNPMVersions();
         var versionList = [{
             type: 'list',
@@ -76,9 +62,9 @@ async function prepareUpgrade() {
             choices: availableVersions.reverse()
         }];
 
-        inquirer.prompt(versionList, (answer) => upgrade(answer.version, npmPath));
+        inquirer.prompt(versionList, (answer) => upgrade(answer.version, program.npmPath));
     } else {
-        upgrade(chosenVersion, npmPath);
+        upgrade(program.npmVersion, program.npmPath);
     }
 }
 
@@ -88,7 +74,7 @@ async function prepareUpgrade() {
  * @param  {string} npmPath - Version that should be installed
  */
 async function upgrade(version, npmPath) {
-    if (!noPrompt) {
+    if (program.prompt) {
         var spinner = new Spinner('Upgrading... %s');
         spinner.start();
     } else {
@@ -97,7 +83,7 @@ async function upgrade(version, npmPath) {
 
     npmpathfinder(npmPath).then((confirmedPath) => {
         powershell.runUpgrade(version, confirmedPath).then(async function (output) {
-            if (!noPrompt) spinner.stop(false);
+            if (program.prompt) spinner.stop(false);
             console.log('\n');
 
             // If we failed to elevate to administrative rights, we have to abort.
@@ -118,8 +104,13 @@ async function upgrade(version, npmPath) {
                 return logError([output.stderr, stdout]);
             }
         }).catch(function (error) {
+            if (spinner) spinner.stop();
             return logError([error]);
         });
+    }, (error) => {
+        console.log(chalk.bold.red('\nWe had trouble with the path you specified:\n'));
+        console.log(error + '\n');
+        return;
     });
 }
 
@@ -152,16 +143,9 @@ function logError(...errors) {
  * Prints helpful information to console
  */
 function displayHelp() {
-    let help = '\n';
-        help += 'Default usage: npm-windows-upgrade\n';
-        help += '\n';
-        help += 'Optional parameters:\n';
-        help += '--version (npm version to upgrade to, usage: --version:3.1.0)\n';
-        help += '--npm-path (path to upgrade npm in, usage: --npmPath:"C:\\nodejs")\n';
-        help += '--no-prompt (bypasses the initial prompt)\n';
-        help += '--no-dns-check (bypasses the internet check)\n';
+    let help = chalk.yellow.bold('  Automatically upgrade npm on Windows. Made with <3 for npm and Node by Microsoft.\n');
+    help += '  All parameters optional. Version ' + versions.nwuVersion + '\n';
 
-    console.log(chalk.yellow.bold('npm-windows-upgrade ' + versions.nwuVersion));
     console.log(help);
 }
 
@@ -208,5 +192,6 @@ function checkForInternet() {
 }
 
 module.exports = {
-    prepareUpgrade: prepareUpgrade
+    prepareUpgrade: prepareUpgrade,
+    displayHelp: displayHelp
 };
