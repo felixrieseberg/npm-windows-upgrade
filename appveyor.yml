@@ -23,7 +23,7 @@ test_script:
   - node --version
   - npm --version
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
-  - ps: npm-windows-upgrade --version:3.2.0 --no-prompt
+  - ps: npm-windows-upgrade --version 3.5.1 --no-prompt
   - npm --version
 
 # Don't actually build.
