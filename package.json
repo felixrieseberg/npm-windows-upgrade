@@ -8,7 +8,7 @@
   "scripts": {
     "preversion": "babel src --out-dir lib"
   },
-  "version": "1.0.0",
+  "version": "1.0.1",
   "private": false,
   "preferGlobal": "true",
   "bin": {
@@ -47,6 +47,7 @@
   "dependencies": {
     "chalk": "^1.1.1",
     "cli-spinner": "^0.2.1",
+    "commander": "^2.9.0",
     "inquirer": "^0.11.0",
     "promise": "^7.0.4",
     "prompt": "^0.2.14",
