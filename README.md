@@ -21,17 +21,29 @@ npm-windows-upgrade
 
 The tool will show you a list of all the published and available versions of npm (including pre-release and beta versions). Choose the one you want to install and let it do its thing!
 
-#### Run with Parameters
+#### Advanced Usage
+Usage: npm-windows-upgrade [options]
+
+Options:
+```
+-h, --help                   Output usage information
+-V, --version                Output the version number
+-d, --no-dns-check           Disable the internet connectivity test
+-p, --no-prompt              Disable the initial confirmation prompt
+-n, --npm-path <path>        (Optional) If passed, npm will be upgraded in the specified location
+-v, --npm-version <version>  (Optional) If passed, npm will be upgraded/downgraded to the specified version
+```
+
 If you have trouble with the script, consider adding parameters manually. A common issue is that the script fails to find npm (and therefore doesn't know where to install it) - in that case, pass the location manually.
 
 ```
-npm-windows-upgrade --npm-path:"C:\nodejs"
+npm-windows-upgrade --npm-path "C:\nodejs"
 ```
 
 To manually specify a version to install, pass the `version` parameter:
 
 ```
-npm-windows-upgrade --version:3.1.0
+npm-windows-upgrade --npm-version 3.5.0
 ```
 
 To override the internet connection check, pass `--no-dns-check`. To disable the initial prompt, pass `--no-prompt`.
