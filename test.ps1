@@ -21,7 +21,7 @@ node .\bin\npm-windows-upgrade --npm-version 3.5.1 --no-prompt
 
 # Check Output
 $npmVersion = npm -v
-if ($npmv -Eq "3.5.1") {
+if ($npmVersion -Eq "3.5.1") {
     "Successfully upgraded npm to 3.5.1"
     exit 0
 } else {
