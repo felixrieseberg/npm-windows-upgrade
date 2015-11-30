@@ -6,7 +6,8 @@
     "!linux"
   ],
   "scripts": {
-    "preversion": "babel src --out-dir lib"
+    "preversion": "babel src --out-dir lib",
+    "test": "powershell.exe \".\\test.ps1\""
   },
   "version": "1.0.1",
   "private": false,
