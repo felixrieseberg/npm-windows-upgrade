@@ -18,7 +18,8 @@ install:
 # Post-install test scripts.
 test_script:
   # Output useful info for debugging.
-  - ps: ./test.ps1
+  - ps: npm test
+  - ps: powershell.exe ".\test\test.ps1"
 
 # Don't actually build.
 build: off

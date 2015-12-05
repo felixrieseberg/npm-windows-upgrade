@@ -1,0 +1,19 @@
+{
+    "extends": "airbnb/base",
+    "parser": "babel-eslint",
+    "rules": {
+        "one-var": 0,
+        "indent": 0, // disabled because not reliable
+        "prefer-const": 0, // disabled because not reliable
+        "comma-dangle": [2, "never"],
+        "no-multi-spaces": [
+            1,
+            {
+                "exceptions": {
+                    "VariableDeclarator": true
+                }
+            }
+        ],
+        "no-console": 0
+    }
+}

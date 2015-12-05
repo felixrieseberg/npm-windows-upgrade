@@ -1,35 +1,35 @@
-var spawn = require('child_process').spawn,
-    exec = require('child_process').exec,
-    fs = require('fs'),
-    path = require('path'),
-    Promise = require('promise');
+const spawn    = require('child_process').spawn,
+      exec     = require('child_process').exec,
+      fs       = require('fs'),
+      TPromise = require('promise');
 
 function _getFromConfig() {
-    return new Promise(function (resolve, reject) {
-        exec('npm config --global get prefix', function (err, stdout) {
+    return new TPromise((resolve) => {
+        exec('npm config --global get prefix', (err, stdout) => {
             if (err) {
                 console.log('Could not determine NodeJS location, will default to a Program Files directory.');
-                resolve(null);
-            } else {
-                let npmPath = stdout.replace(/\n/, '');
-                resolve(npmPath);
+                return resolve(null);
             }
+
+            let npmPath = stdout.replace(/\n/, '');
+            return resolve(npmPath);
         });
     });
 }
 
 function _getFromCommand() {
-    return new Promise(function (resolve, reject) {
-        var spawnOptions = ['-NoProfile', '-NoLogo', 'Get-Command npm | Select-Object -ExpandProperty Definition'],
-            child = spawn('powershell.exe', spawnOptions),
-            stdout = [],
+    return new TPromise((resolve) => {
+        const spawnOptions = ['-NoProfile', '-NoLogo', 'Get-Command npm | Select-Object -ExpandProperty Definition'],
+            child = spawn('powershell.exe', spawnOptions);
+
+        let stdout = [],
             stderr = [],
             cmdPath;
 
         child.stdout.on('data', (data) => stdout.push(data.toString()));
         child.stderr.on('data', (data) => stderr.push(data.toString()));
 
-        child.on('exit', function () {
+        child.on('exit', () => {
             if (stderr.length > 0) {
                 return _getFromConfig();
             }
@@ -57,9 +57,9 @@ function _getFromCommand() {
  * @return {string}      - NodeJS installation path
  */
 module.exports = function get(npmPath) {
-    var stats, error;
+    let stats, error;
 
-    return new Promise(function (resolve, reject) {
+    return new TPromise((resolve, reject) => {
         if (npmPath) {
             try {
                 stats = fs.lstatSync(npmPath);
@@ -67,9 +67,9 @@ module.exports = function get(npmPath) {
                     error = 'Given path ' + npmPath + ' is not a valid directory.\n';
                     error += 'Please ensure that you added the correct path and try again!';
                     return reject(error);
-                } else {
-                    return resolve(npmPath);
                 }
+
+                return resolve(npmPath);
             } catch (e) {
                 if (e) {
                     error = 'Given path ' + npmPath + ' is not a valid directory.\n';
@@ -77,9 +77,8 @@ module.exports = function get(npmPath) {
                     return reject(error);
                 }
             }
-            return;
         }
 
         _getFromCommand().then((result) => resolve(result));
     });
-}
+};

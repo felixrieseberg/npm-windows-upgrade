@@ -1,7 +1,7 @@
 #! /usr/bin/env node
-var program = require('commander');
-var upgrader = require('../lib/upgrade');
-var versions = require('../lib/versions');
+var program = require('commander'),
+    upgrader = require('../lib/upgrade'),
+    versions = require('../lib/versions');
 
 // Check OS
 if (!/^win/.test(process.platform)) {

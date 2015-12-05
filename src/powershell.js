@@ -1,6 +1,6 @@
-var spawn = require('child_process').spawn,
-    path = require('path'),
-    Promise = require('promise');
+const spawn   = require('child_process').spawn,
+      path    = require('path'),
+      TPromise = require('promise');
 
 /**
  * Executes the PS1 script upgrading npm
@@ -9,11 +9,12 @@ var spawn = require('child_process').spawn,
  * @return {stderr[], stdout[]}   - stderr and stdout received from the PS1 process
  */
 function runUpgrade(version, npmPath) {
-    return new Promise(function (resolve, reject) {
-        var scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
-            specialArgs = npmPath === null ? '& {& \'' + scriptPath + '\' -version \'' + version + '\' }' : '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath "' + npmPath + '" }',
-            psArgs = ['-NoProfile', '-NoLogo', specialArgs],
-            stdout = [],
+    return new TPromise((resolve, reject) => {
+        const scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1'),
+              specialArgs = npmPath === null ? '& {& \'' + scriptPath + '\' -version \'' + version + '\' }' : '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath "' + npmPath + '" }',
+              psArgs = ['-NoProfile', '-NoLogo', specialArgs];
+
+        let stdout = [],
             stderr = [],
             child;
 
@@ -23,18 +24,14 @@ function runUpgrade(version, npmPath) {
             return reject(error);
         }
 
-        child.stdout.on('data', function (data) {
-            stdout.push(data.toString());
-        });
+        child.stdout.on('data', (data) => stdout.push(data.toString()));
 
-        child.stderr.on('data', function (data) {
+        child.stderr.on('data', (data) => {
             console.log('Error: ', data.toString());
             stderr.push(data.toString());
         });
 
-        child.on('exit', function () {
-            resolve({stderr: stderr, stdout: stdout});
-        });
+        child.on('exit', () => resolve({ stderr: stderr, stdout: stdout }));
 
         child.stdin.end();
     });
@@ -46,25 +43,25 @@ function runUpgrade(version, npmPath) {
  * @return {[type]}      - True if unrestricted, false if it isn't
  */
 function checkExecutionPolicy() {
-    return new Promise(function (resolve, reject) {
-        var output = [], unrestricted, child, i;
+    return new TPromise((resolve) => {
+        let output = [], unrestricted, child, i;
 
         try {
             child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', 'Get-ExecutionPolicy']);
         } catch (error) {
             // This is dirty, but the best way for us to try/catch right now
-            resolve({error: error});
+            resolve({ error: error });
         }
 
-        child.stdout.on('data', function (data) {
+        child.stdout.on('data', (data) => {
             output.push(data.toString());
         });
 
-        child.stderr.on('data', function (data) {
+        child.stderr.on('data', (data) => {
             output.push(data.toString());
         });
 
-        child.on('exit', function () {
+        child.on('exit', () => {
             unrestricted = false;
 
             for (i = output.length - 1; i >= 0; i = i - 1) {
@@ -88,4 +85,4 @@ function checkExecutionPolicy() {
 module.exports = {
     checkExecutionPolicy: checkExecutionPolicy,
     runUpgrade: runUpgrade
-}
+};
