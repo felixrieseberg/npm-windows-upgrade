@@ -33,7 +33,7 @@ function logError(errors, version, installedVersion) {
 
     console.log(chalk.bold.red(info));
 
-    if (errors) console.log('Here is the error:');
+    if (errors && errors.length && errors.length > 0) console.log('Here is the error:');
 
     // If we just got an error string (we shouldn't, handle that)
     if (typeof errors !== 'string') {
@@ -169,7 +169,7 @@ async function prepareUpgrade(_program) {
     // Check Execution Policy
     const canExecute = await powershell.checkExecutionPolicy();
 
-    if (canExecute.error) {
+    if (canExecute.error & canExecute.error.length && canExecute.error.length > 0) {
         console.log(chalk.bold.red('Encountered an error while checking the system\'s execution policy. The error was:'));
         console.log(canExecute.error);
         return;
