@@ -82,7 +82,36 @@ function checkExecutionPolicy() {
     });
 }
 
+/**
+ * Executes 'npm install -g npm' upgrading npm
+ * @param  {string}   version     - The version to be installed (npm install npm@{version})
+ * @return {stderr[], stdout[]}   - stderr and stdout received from the PS1 process
+ */
+function runSimpleUpgrade(version) {
+    return new TPromise((resolve) => {
+        let npmCommand = (version) ? `npm install -g npm@${version}` : 'npm install -g npm',
+            stdout = [],
+            stderr = [],
+            child;
+
+        try {
+            child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', npmCommand]);
+        } catch (error) {
+            // This is dirty, but the best way for us to try/catch right now
+            resolve({ error: error });
+        }
+
+        child.stdout.on('data', (data) => stdout.push(data.toString()));
+        child.stderr.on('data', (data) => stderr.push(data.toString()));
+
+        child.on('exit', () => resolve({ stderr: stderr, stdout: stdout }));
+
+        child.stdin.end();
+    });
+}
+
 module.exports = {
     checkExecutionPolicy: checkExecutionPolicy,
-    runUpgrade: runUpgrade
+    runUpgrade: runUpgrade,
+    runSimpleUpgrade: runSimpleUpgrade
 };

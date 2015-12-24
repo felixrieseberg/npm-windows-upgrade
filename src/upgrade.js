@@ -103,9 +103,43 @@ function checkForInternet() {
 // Upgrade Functions
 
 /**
+ * Attempts a simple upgrade, eventually calling npm install -g npm
+ * @param  {string} version - Version that should be installed
+ */
+async function simpleUpgrade(version) {
+    let spinner;
+
+    if (program.prompt) {
+        spinner = new Spinner('Upgrading (fallback method)... %s');
+        spinner.start();
+    } else {
+        console.log('Starting upgrade (fallback method)...');
+    }
+
+    powershell.runSimpleUpgrade(version).then(async function handleOutput(output) {
+        if (spinner) spinner.stop();
+
+        if (output.error) {
+            // Something went wrong - again :(
+            return logError([output.error]);
+        }
+
+        const installedVersion = await versions.getInstalledNPMVersion();
+        if (installedVersion === version) {
+            // Awesome, the upgrade worked!
+            const info = 'Upgrade finished. Your new npm version is ' + installedVersion + '. Have a nice day!';
+            return console.log(chalk.bold.green(info));
+        }
+
+        // Well, we're giving up here
+        return logError([], version, installedVersion);
+    });
+}
+
+/**
  * The actual upgrade method, utilizing all the helper methods above
  * @param  {string} version - Version that should be installed
- * @param  {string} npmPath - Version that should be installed
+ * @param  {string} npmPath - Path where npm should be installed
  */
 async function upgrade(version, npmPath) {
     let spinner;
@@ -139,7 +173,8 @@ async function upgrade(version, npmPath) {
             }
 
             // Uh-oh, something didn't work as it should have.
-            return logError([], version, installedVersion);
+            // Let's attempt a last-ditch effort - try npm's upgrade method
+            simpleUpgrade(version);
         }).catch((error) => {
             if (spinner) spinner.stop();
             return logError([error]);
@@ -150,7 +185,6 @@ async function upgrade(version, npmPath) {
         return;
     });
 }
-
 
 /**
  * Prepares the upgrade by checking execution policy, internet, and
