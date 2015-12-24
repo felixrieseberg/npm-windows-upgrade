@@ -1,6 +1,6 @@
-const exec     = require('child_process').exec,
-      version  = require('../package.json').version,
-      TPromise = require('promise');
+const exec        = require('child_process').exec,
+      nwuVersion  = require('../package.json').version,
+      TPromise    = require('promise');
 
 /**
  * Gets the currently installed version of npm (npm -v)
@@ -40,7 +40,7 @@ function getAvailableNPMVersions() {
 }
 
 module.exports = {
-    nwuVersion: version,
-    getInstalledNPMVersion: getInstalledNPMVersion,
-    getAvailableNPMVersions: getAvailableNPMVersions
+    nwuVersion,
+    getInstalledNPMVersion,
+    getAvailableNPMVersions
 };

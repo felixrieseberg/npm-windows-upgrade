@@ -31,7 +31,7 @@ function runUpgrade(version, npmPath) {
             stderr.push(data.toString());
         });
 
-        child.on('exit', () => resolve({ stderr: stderr, stdout: stdout }));
+        child.on('exit', () => resolve({ stderr, stdout }));
 
         child.stdin.end();
     });
@@ -50,7 +50,7 @@ function checkExecutionPolicy() {
             child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', 'Get-ExecutionPolicy']);
         } catch (error) {
             // This is dirty, but the best way for us to try/catch right now
-            resolve({ error: error });
+            resolve({ error });
         }
 
         child.stdout.on('data', (data) => {
@@ -98,20 +98,20 @@ function runSimpleUpgrade(version) {
             child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', npmCommand]);
         } catch (error) {
             // This is dirty, but the best way for us to try/catch right now
-            resolve({ error: error });
+            resolve({ error });
         }
 
         child.stdout.on('data', (data) => stdout.push(data.toString()));
         child.stderr.on('data', (data) => stderr.push(data.toString()));
 
-        child.on('exit', () => resolve({ stderr: stderr, stdout: stdout }));
+        child.on('exit', () => resolve({ stderr, stdout }));
 
         child.stdin.end();
     });
 }
 
 module.exports = {
-    checkExecutionPolicy: checkExecutionPolicy,
-    runUpgrade: runUpgrade,
-    runSimpleUpgrade: runSimpleUpgrade
+    checkExecutionPolicy,
+    runUpgrade,
+    runSimpleUpgrade
 };

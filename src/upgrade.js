@@ -241,6 +241,6 @@ async function prepareUpgrade(_program) {
 }
 
 module.exports = {
-    prepareUpgrade: prepareUpgrade,
-    displayHelp: displayHelp
+    prepareUpgrade,
+    displayHelp
 };
