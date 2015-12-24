@@ -1,8 +1,9 @@
 #! /usr/bin/env node
-var program = require('commander'),
+var program  = require('commander'),
+    debug    = require('../lib/debug'),
     upgrader = require('../lib/upgrade'),
     versions = require('../lib/versions');
-
+ 
 // Check OS
 if (!/^win/.test(process.platform)) {
     throw('This script upgrades npm on Windows, but the OS is not Windows.');

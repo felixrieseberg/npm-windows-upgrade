@@ -1,6 +1,7 @@
-const spawn   = require('child_process').spawn,
-      path    = require('path'),
-      TPromise = require('promise');
+const spawn    = require('child_process').spawn,
+      path     = require('path'),
+      TPromise = require('promise'),
+      debug    = require('./debug');
 
 /**
  * Executes the PS1 script upgrading npm
@@ -43,21 +44,27 @@ function runUpgrade(version, npmPath) {
  * @return {[type]}      - True if unrestricted, false if it isn't
  */
 function checkExecutionPolicy() {
+    debug('PowerShell: Checking execution policy');
+
     return new TPromise((resolve) => {
         let output = [], unrestricted, child, i;
 
         try {
+            debug('Powershell: Attempting to spawn PowerShell child');
             child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', 'Get-ExecutionPolicy']);
         } catch (error) {
+            debug('Powershell: Could not spawn PowerShell child');
             // This is dirty, but the best way for us to try/catch right now
             resolve({ error });
         }
 
         child.stdout.on('data', (data) => {
+            debug('PowerShell: Stdout received: ' + data.toString());
             output.push(data.toString());
         });
 
         child.stderr.on('data', (data) => {
+            debug('PowerShell: Stderr received: ' + data.toString());
             output.push(data.toString());
         });
 
@@ -66,14 +73,17 @@ function checkExecutionPolicy() {
 
             for (i = output.length - 1; i >= 0; i = i - 1) {
                 if (output[i].indexOf('Unrestricted') > -1) {
+                    debug('PowerShell: Execution Policy seems unrestricted');
                     unrestricted = true;
                     break;
                 }
             }
 
             if (!unrestricted) {
+                debug('PowerShell: Resolving restricted (false)');
                 resolve(false);
             } else {
+                debug('PowerShell: Resolving unrestricted (true)');
                 resolve(true);
             }
         });

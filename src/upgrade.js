@@ -7,7 +7,8 @@ const chalk              = require('chalk'),
 // Internal Modules
       versions           = require('./versions'),
       powershell         = require('./powershell'),
-      npmpathfinder      = require('./npmpathfinder');
+      npmpathfinder      = require('./npmpathfinder'),
+      debug              = require('./debug');
 
 let program;
 
@@ -191,6 +192,7 @@ async function upgrade(version, npmPath) {
  * checking for parameters.
  */
 async function prepareUpgrade(_program) {
+    debug('Upgrade: Preparing upgrade');
     // Set program reference
     program = _program;
 
@@ -198,18 +200,23 @@ async function prepareUpgrade(_program) {
     console.log(chalk.yellow.bold('npm-windows-upgrade ' + versions.nwuVersion));
 
     // Let's make sure that the user wants to upgrade
+    debug('Upgrade: Asking for confirmation');
     if (program.prompt && !(await askForConfirmation())) return;
 
     // Check Execution Policy
+    debug('Upgrade: Checking execution policy');
     const canExecute = await powershell.checkExecutionPolicy();
 
-    if (canExecute.error & canExecute.error.length && canExecute.error.length > 0) {
+    debug('Upgrade: canExecute is ' + canExecute);
+    if (canExecute.error && canExecute.error.length && canExecute.error.length > 0) {
+        debug('Upgrade: Execution Policy check failed');
         console.log(chalk.bold.red('Encountered an error while checking the system\'s execution policy. The error was:'));
         console.log(canExecute.error);
         return;
     }
 
     if (!canExecute) {
+        debug('Upgrade: Execution policy insufficient');
         console.log(chalk.bold.red('Scripts cannot be executed on this system.'));
         console.log(chalk.green('To fix, run the command below as Administrator in PowerShell and try again:'));
         console.log(chalk.red('Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force'));
@@ -217,15 +224,18 @@ async function prepareUpgrade(_program) {
     }
 
     // Check Internet Connection
+    debug('Upgrade: Checking internet connection');
     const isOnline = await checkForInternet();
 
     if (!isOnline) {
+        debug('Upgrade: Internet Check: Offline');
         console.error(chalk.bold.red('We have trouble connecting to the Internet. Aborting.'));
         return;
     }
 
     // Let's check our version
     if (!program.npmVersion) {
+        debug('Upgrade: Getting available npm versions from npm');
         const availableVersions = await versions.getAvailableNPMVersions();
         const versionList = [{
             type: 'list',
@@ -234,6 +244,7 @@ async function prepareUpgrade(_program) {
             choices: availableVersions.reverse()
         }];
 
+        debug('Upgrade: Got npm version list, now asking user for selection');
         inquirer.prompt(versionList, (answer) => upgrade(answer.version, program.npmPath));
     } else {
         upgrade(program.npmVersion, program.npmPath);
