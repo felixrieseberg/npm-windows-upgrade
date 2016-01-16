@@ -32,7 +32,10 @@ function logError(errors, version, installedVersion) {
 
     info += 'Please consider reporting your trouble to http://aka.ms/npm-issues.';
 
-    console.log(chalk.bold.red(info));
+    console.log(chalk.red(info));
+
+    console.log(chalk.bold('\nDebug Information:\n'));
+    console.log(versions.getVersions());
 
     if (errors && errors.length && errors.length > 0) console.log('Here is the error:');
 

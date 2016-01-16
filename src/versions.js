@@ -39,8 +39,20 @@ function getAvailableNPMVersions() {
     });
 }
 
+/**
+ * Get installed versions of virtually everything important
+ */
+function getVersions() {
+    let versions = process.versions;
+    versions.npm = require('npm').version;
+    versions.os = process.platform + ' ' + process.arch;
+
+    return versions;
+}
+
 module.exports = {
     nwuVersion,
     getInstalledNPMVersion,
-    getAvailableNPMVersions
+    getAvailableNPMVersions,
+    getVersions
 };

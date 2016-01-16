@@ -15,6 +15,10 @@ function runUpgrade(version, npmPath) {
               specialArgs = npmPath === null ? '& {& \'' + scriptPath + '\' -version \'' + version + '\' }' : '& {& \'' + scriptPath + '\' -version \'' + version + '\' -NodePath "' + npmPath + '" }',
               psArgs = ['-NoProfile', '-NoLogo', specialArgs];
 
+        if (process.env.DEBUG) {
+            psArgs.push('-debug');
+        }
+
         let stdout = [],
             stderr = [],
             child;

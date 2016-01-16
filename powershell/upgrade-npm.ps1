@@ -53,7 +53,7 @@ function EnsurePath
 function UpdateNpm($PassedNodePath)
 {
     $NpmPath = (Join-Path $PassedNodePath "node_modules\npm")
-    Write-Debug "Assuming npm in $NpmPath"
+    "Assuming npm in $NpmPath"
 
     if (Test-Path $PassedNodePath)
     {
@@ -81,7 +81,7 @@ function UpdateNpm($PassedNodePath)
         # Upgrade npm
         cd $PassedNodePath
         Write-Debug "Upgrading npm in $PassedNodePath"
-        .\npm install npm@$version
+        .\npm install npm@$version --loglevel win
 
         # Copy npmrc back
         if ($Npmrc)
