@@ -29,15 +29,17 @@ function runUpgrade(version, npmPath) {
             return reject(error);
         }
 
-        child.stdout.on('data', (data) => stdout.push(data.toString()));
+        child.stdout.on('data', (data) => {
+            debug('PowerShell: Stdout received: ' + data.toString());
+            stdout.push(data.toString());
+        });
 
         child.stderr.on('data', (data) => {
-            console.log('Error: ', data.toString());
+            debug('PowerShell: Stderr received: ' + data.toString());
             stderr.push(data.toString());
         });
 
         child.on('exit', () => resolve({ stderr, stdout }));
-
         child.stdin.end();
     });
 }

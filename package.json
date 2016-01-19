@@ -6,6 +6,7 @@
     "!linux"
   ],
   "scripts": {
+    "build": "babel src --out-dir lib",
     "preversion": "babel src --out-dir lib",
     "test": "gulp test"
   },
