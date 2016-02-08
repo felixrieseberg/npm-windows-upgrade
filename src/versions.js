@@ -40,6 +40,20 @@ function getAvailableNPMVersions() {
 }
 
 /**
+ * Get the current name and version of Windows
+ */
+function _getWindowsVersion() {
+    return new TPromise((resolve) => {
+        const command = 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"';
+        exec(command, (error, stdout) => {
+            if (stdout) {
+                resolve(stdout);
+            }
+        });
+    });
+}
+
+/**
  * Get installed versions of virtually everything important
  */
 function getVersions() {
@@ -48,7 +62,7 @@ function getVersions() {
         let prettyVersions = '';
         versions.os = process.platform + ' ' + process.arch;
 
-        for (var variable in versions) {
+        for (let variable in versions) {
             if (versions.hasOwnProperty(variable)) {
                 prettyVersions += `${variable}: ${versions[variable]}\n`;
             }
@@ -56,23 +70,9 @@ function getVersions() {
 
         _getWindowsVersion()
             .then((windowsVersion) => {
-                prettyVersions += windowsVersion.replace(/  +/g, ' ');
+                prettyVersions += windowsVersion.replace(/  +/g, ' '); // eslint-disable-line no-regex-spaces
                 resolve(prettyVersions);
             });
-    });
-}
-
-/**
- * Get the current name and version of Windows
- */
-function _getWindowsVersion() {
-    return new TPromise((resolve) => {
-        const command = 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"';
-        exec(command, (error, stdout, stderr) => {
-            if (stdout) {
-                resolve(stdout);
-            }
-        });
     });
 }
 

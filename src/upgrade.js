@@ -20,7 +20,7 @@ Logs an error to console and exits the process with status code 1
 */
 function logError(errors, version, installedVersion) {
     // Uh-oh, something didn't work as it should have.
-    versions.getVersions().then((versions) => {
+    versions.getVersions().then((debugVersions) => {
         let info;
 
         if (version && installedVersion) {
@@ -36,7 +36,7 @@ function logError(errors, version, installedVersion) {
         console.log(chalk.red(info));
 
         console.log(chalk.bold('\nDebug Information:\n'));
-        console.log(versions);
+        console.log(debugVersions);
 
         if (errors && errors.length && errors.length > 0) console.log('Here is the error:');
 
@@ -51,7 +51,7 @@ function logError(errors, version, installedVersion) {
         }
 
         setTimeout(() => {
-            process.exit(1)
+            process.exit(1);
         }, 1000);
     });
 }
@@ -200,7 +200,7 @@ async function upgrade(version, npmPath) {
 async function prepareUpgrade(_program) {
     debug('Upgrade: Preparing upgrade');
 
-    //Set program reference
+    // Set program reference
     program = _program;
 
     // Print version
