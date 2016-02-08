@@ -43,11 +43,37 @@ function getAvailableNPMVersions() {
  * Get installed versions of virtually everything important
  */
 function getVersions() {
-    let versions = process.versions;
-    versions.npm = require('npm').version;
-    versions.os = process.platform + ' ' + process.arch;
+    return new TPromise((resolve) => {
+        let versions = process.versions;
+        let prettyVersions = '';
+        versions.os = process.platform + ' ' + process.arch;
 
-    return versions;
+        for (var variable in versions) {
+            if (versions.hasOwnProperty(variable)) {
+                prettyVersions += `${variable}: ${versions[variable]}\n`;
+            }
+        }
+
+        _getWindowsVersion()
+            .then((windowsVersion) => {
+                prettyVersions += windowsVersion.replace(/  +/g, ' ');
+                resolve(prettyVersions);
+            });
+    });
+}
+
+/**
+ * Get the current name and version of Windows
+ */
+function _getWindowsVersion() {
+    return new TPromise((resolve) => {
+        const command = 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"';
+        exec(command, (error, stdout, stderr) => {
+            if (stdout) {
+                resolve(stdout);
+            }
+        });
+    });
 }
 
 module.exports = {

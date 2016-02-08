@@ -20,38 +20,41 @@ Logs an error to console and exits the process with status code 1
 */
 function logError(errors, version, installedVersion) {
     // Uh-oh, something didn't work as it should have.
-    let info;
+    versions.getVersions().then((versions) => {
+        let info;
 
-    if (version && installedVersion) {
-        info = 'You wanted to install npm ' + version + ', but the installed version is' + installedVersion + '.\n';
-    } else if (version) {
-        info = 'You wanted to install npm ' + version + ', but we could not confirm that the installation succeeded.\n';
-    } else {
-        info = 'We encountered an error during installation.\n';
-    }
+        if (version && installedVersion) {
+            info = `You wanted to install npm ${version}, but the installed version is ${installedVersion}.\n`;
+        } else if (version) {
+            info = `You wanted to install npm ${version}, but we could not confirm that the installation succeeded.\n`;
+        } else {
+            info = 'We encountered an error during installation.\n';
+        }
 
-    info += 'Please consider reporting your trouble to http://aka.ms/npm-issues.';
+        info += 'Please consider reporting your trouble to http://aka.ms/npm-issues.';
 
-    console.log(chalk.red(info));
+        console.log(chalk.red(info));
 
-    console.log(chalk.bold('\nDebug Information:\n'));
-    console.log(versions.getVersions());
+        console.log(chalk.bold('\nDebug Information:\n'));
+        console.log(versions);
 
-    if (errors && errors.length && errors.length > 0) console.log('Here is the error:');
+        if (errors && errors.length && errors.length > 0) console.log('Here is the error:');
 
-    // If we just got an error string (we shouldn't, handle that)
-    if (typeof errors !== 'string') {
-        console.log('\n' + errors + '\n');
-        return process.exit(1);
-    }
+        // If we just got an error string (we shouldn't, handle that)
+        if (typeof errors !== 'string') {
+            console.log('\n' + errors + '\n');
+            return process.exit(1);
+        }
 
-    for (let i = 0; i < errors.length; i++) {
-        console.log('\n' + errors[i] + '\n');
-    }
+        for (let i = 0; i < errors.length; i++) {
+            console.log('\n' + errors[i] + '\n');
+        }
 
-    return process.exit(1);
+        setTimeout(() => {
+            process.exit(1)
+        }, 1000);
+    });
 }
-
 /**
  * Prints helpful information to console
  */
@@ -196,7 +199,8 @@ async function upgrade(version, npmPath) {
  */
 async function prepareUpgrade(_program) {
     debug('Upgrade: Preparing upgrade');
-    // Set program reference
+
+    //Set program reference
     program = _program;
 
     // Print version
