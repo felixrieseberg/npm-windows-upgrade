@@ -1,6 +1,6 @@
 {
   "name": "npm-windows-upgrade",
-  "version": "1.3.2",
+  "version": "2.0.0",
   "dependencies": {
     "abbrev": {
       "version": "1.0.7",
