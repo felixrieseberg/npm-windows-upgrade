@@ -56,9 +56,9 @@
     "chalk": "^1.1.1",
     "cli-spinner": "^0.2.4",
     "commander": "^2.9.0",
-    "inquirer": "^0.11.4",
+    "inquirer": "^0.12.0",
     "promise": "^7.1.1",
-    "prompt": "^0.2.14",
+    "prompt": "^1.0.0",
     "regenerator-runtime-only": "^0.8.38"
   }
 }

@@ -12,7 +12,7 @@ First, ensure that you can execute scripts on your system by running the followi
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 ```
 
-Then, to install and use this upgrader tool, run:
+Then, to install and use this upgrader tool, run (also from an elevated PowerShell or cmd.exe):
 
 ```
 npm install -g npm-windows-upgrade
