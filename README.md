@@ -54,6 +54,15 @@ Please do [report your issues on GitHub](https://github.com/felixrieseberg/npm-w
 This tool was made by Microsoft with :heart: for npm and Node, but it is provided "as is", without warranty of any kind, expressed or
 implied. For details, please consult the `LICENSE` file.
 
+##### Fix an Attempted Upgrade
+Chances are that you attempted to upgrade npm before, it somehow failed, and you then went looking for this tool. If the tool fails to upgrade, it may be troubled by partial changes done during `npm install npm` or `npm upgrade npm`. In that case, you will have to completely uninstall Node:
+
+ * Uninstall Node.js (select `Uninstall`, not the `Repair` option).
+ * Go into `%programfiles%\nodejs` and delete the entire folder.
+ * Delete `%appdata%\npm` and `%appdata%\npm-cache`.
+ * Edit your `PATH` and remove everything that references npm (to do so, hit "Start" and search for "Environment Variables").
+ * Reinstall Node, then install this tool - and only use this tool to upgrade npm, do not attempt to run `npm install npm`.
+
 ### More Useful Node.js Stuff
 Microsoft is working hard to make sure that our users have the best possible experience with Node.js. For a helpful set of content that makes it easier to avoid any potential gotchas, [go check out our Node.js Guidelines](https://github.com/microsoft/nodejs-guidelines) - a collection of tips and advanced best practices!
 

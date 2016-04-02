@@ -25,6 +25,10 @@ function logError(errors, version, installedVersion) {
 
         if (version && installedVersion) {
             info = `You wanted to install npm ${version}, but the installed version is ${installedVersion}.\n`;
+            info += `\n`;
+            info += `A common reason is an attempted "npm install npm" or "npm upgrade npm".`;
+            info += 'As of today, the only solution is to completely uninstall and then reinstall Node.js.';
+            info += 'For a small tutorial, please see http://aka.ms/fix-npm-upgrade.\n';
         } else if (version) {
             info = `You wanted to install npm ${version}, but we could not confirm that the installation succeeded.\n`;
         } else {

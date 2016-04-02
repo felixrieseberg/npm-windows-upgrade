@@ -94,7 +94,7 @@ function UpdateNpm($PassedNodePath)
         "All done!"
     } else
     {
-        "Could not find installation location (assumed in $PassedNodePath) - aborting upgrade"
+        "Could not find installation location (assumed in $PassedNodePath) - aborting upgrade."
     }
 }
 
