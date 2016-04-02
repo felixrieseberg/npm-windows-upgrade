@@ -10,7 +10,7 @@
     "preversion": "babel src --out-dir lib",
     "test": "gulp test"
   },
-  "version": "2.2.0",
+  "version": "2.2.1",
   "private": false,
   "preferGlobal": "true",
   "bin": {
