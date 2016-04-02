@@ -15,7 +15,7 @@ Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 Then, to install and use this upgrader tool, run (also from an elevated PowerShell or cmd.exe):
 
 ```
-npm install -g npm-windows-upgrade
+npm install --global --production npm-windows-upgrade
 npm-windows-upgrade
 ```
 
