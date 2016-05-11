@@ -51,8 +51,10 @@ function getLatestNPMVersion() {
                 error += 'with the version you want to install (npm-windows-upgrade --version:3.0.0)';
                 return reject(error);
             }
+            
+            let latest = stdout.replace(/(\r\n|\n|\r)/gm,'');
 
-            resolve(stdout);
+            resolve(latest.trim());
         });
     });
 }
