@@ -257,6 +257,11 @@ async function prepareUpgrade(_program) {
 
         debug('Upgrade: Got npm version list, now asking user for selection');
         inquirer.prompt(versionList, (answer) => upgrade(answer.version, program.npmPath));
+    } else if (program.npmVersion === 'latest') {
+        // If the version is "latest", let's find out what that is
+        const latest = await versions.getLatestNPMVersion();
+        
+        upgrade(latest, program.npmPath);
     } else {
         upgrade(program.npmVersion, program.npmPath);
     }

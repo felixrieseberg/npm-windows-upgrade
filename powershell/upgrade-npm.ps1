@@ -16,9 +16,7 @@ Param(
 
 $ErrorActionPreference = "Stop"
 
-#
-# Self-Elevate
-# ---------------------------------------------------------------------------------------------------------
+# Returns whether or not the current user has administrative privileges
 function IsAdministrator
 {
     $Identity = [System.Security.Principal.WindowsIdentity]::GetCurrent()
@@ -26,11 +24,13 @@ function IsAdministrator
     $Principal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
+# Returns whether or not UAC is enabled on Windows
 function IsUacEnabled
 {
     (Get-ItemProperty HKLM:\Software\Microsoft\Windows\CurrentVersion\Policies\System).EnableLua -ne 0
 }
 
+# Ensures that npm is on the $PATH (and there before NodeJS)
 function EnsurePath
 {
     # Is %appdata%/npm part of the path?
@@ -50,6 +50,7 @@ function EnsurePath
     }
 }
 
+# Executes the npm upgrade
 function UpdateNpm($PassedNodePath)
 {
     $NpmPath = (Join-Path $PassedNodePath "node_modules\npm")
@@ -98,6 +99,9 @@ function UpdateNpm($PassedNodePath)
     }
 }
 
+#
+# Check Elevation
+# ---------------------------------------------------------------------------------------------------------
 if (!(IsAdministrator))
 {
     "Please restart this script from an administrative PowerShell!"

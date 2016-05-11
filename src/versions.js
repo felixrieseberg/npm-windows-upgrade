@@ -40,6 +40,24 @@ function getAvailableNPMVersions() {
 }
 
 /**
+ * Fetches the published versions of npm from the npm registry
+ * @return {versions[]}  - Array of the available versions
+ */
+function getLatestNPMVersion() {
+    return new TPromise((resolve, reject) => {
+        exec('npm show npm version', (err, stdout) => {
+            if (err) {
+                let error = 'We could not show latest available versions. Try running this script again ';
+                error += 'with the version you want to install (npm-windows-upgrade --version:3.0.0)';
+                return reject(error);
+            }
+
+            resolve(stdout);
+        });
+    });
+}
+
+/**
  * Get the current name and version of Windows
  */
 function _getWindowsVersion() {
@@ -79,6 +97,7 @@ function getVersions() {
 module.exports = {
     nwuVersion,
     getInstalledNPMVersion,
+    getLatestNPMVersion,
     getAvailableNPMVersions,
     getVersions
 };
