@@ -260,7 +260,7 @@ async function prepareUpgrade(_program) {
     } else if (program.npmVersion === 'latest') {
         // If the version is "latest", let's find out what that is
         const latest = await versions.getLatestNPMVersion();
-        
+
         upgrade(latest, program.npmPath);
     } else {
         upgrade(program.npmVersion, program.npmPath);
