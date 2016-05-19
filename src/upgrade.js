@@ -73,19 +73,17 @@ function displayHelp() {
  * Asks the user for confirmation whether or not he/she wants to upgrade
  */
 function askForConfirmation() {
-    return new TPromise((resolve) => {
-        inquirer.prompt({
-            type: 'confirm',
-            name: 'c',
-            message: 'This tool will upgrade npm. Do you want to continue?'
-        }, (response) => {
-            if (!response.c) {
-                console.log(chalk.bold.green('Well then, we\'re done here. Have a nice day!'));
-                resolve(false);
-            } else {
-                resolve(true);
-            }
-        });
+    return inquirer.prompt({
+        type: 'confirm',
+        name: 'c',
+        message: 'This tool will upgrade npm. Do you want to continue?'
+    }).then(response => {
+        if (!response.c) {
+            console.log(chalk.bold.green('Well then, we\'re done here. Have a nice day!'));
+            return false;
+        } else {
+            return true;
+        }
     });
 }
 
@@ -256,7 +254,7 @@ async function prepareUpgrade(_program) {
         }];
 
         debug('Upgrade: Got npm version list, now asking user for selection');
-        inquirer.prompt(versionList, (answer) => upgrade(answer.version, program.npmPath));
+        inquirer.prompt(versionList).then(answer => upgrade(answer.version, program.npmPath));
     } else if (program.npmVersion === 'latest') {
         // If the version is "latest", let's find out what that is
         const latest = await versions.getLatestNPMVersion();
