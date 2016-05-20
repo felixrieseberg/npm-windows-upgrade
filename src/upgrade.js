@@ -81,9 +81,9 @@ function askForConfirmation() {
         if (!response.c) {
             console.log(chalk.bold.green('Well then, we\'re done here. Have a nice day!'));
             return false;
-        } else {
-            return true;
         }
+
+        return true;
     });
 }
 
