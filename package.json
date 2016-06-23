@@ -6,9 +6,9 @@
     "!linux"
   ],
   "scripts": {
-    "build": "babel src --out-dir lib",
-    "preversion": "babel src --out-dir lib",
-    "test": "gulp test"
+    "build": "babel src --out-dir lib --source-maps true",
+    "preversion": "npm run build",
+    "test": "standard"
   },
   "version": "2.3.1",
   "private": false,
@@ -41,17 +41,12 @@
     }
   ],
   "devDependencies": {
+    "babel-cli": "^6.10.1",
     "babel-core": "^6.5.2",
-    "babel-eslint": "^4.1.6",
+    "babel-eslint": "^6.0.4",
     "babel-plugin-transform-async-to-generator": "^6.7.4",
     "babel-preset-es2015": "^6.5.0",
-    "eslint-config-airbnb": "^2.0.0",
-    "grunt": "^0.4.5",
-    "grunt-contrib-jshint": "^0.12.0",
-    "grunt-jscs": "^2.7.0",
-    "gulp": "^3.9.0",
-    "gulp-eslint": "^1.1.1",
-    "load-grunt-tasks": "^3.4.0"
+    "standard": "^7.1.2"
   },
   "dependencies": {
     "chalk": "~1.1.0",
@@ -61,5 +56,8 @@
     "promise": "~7.1.0",
     "prompt": "~1.0.0",
     "regenerator-runtime-only": "~0.8.38"
+  },
+  "standard": {
+    "parser": "babel-eslint"
   }
 }

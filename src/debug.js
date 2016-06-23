@@ -1,5 +1,7 @@
-module.exports = function debug(log) {
-    if (process.env.DEBUG) {
-        console.log(log);
-    }
-};
+function debug (message) {
+  if (process.env.DEBUG) {
+    console.log(message)
+  }
+}
+
+module.exports = debug

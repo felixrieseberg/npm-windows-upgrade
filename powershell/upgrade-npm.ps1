@@ -104,6 +104,7 @@ function UpdateNpm($PassedNodePath)
 # ---------------------------------------------------------------------------------------------------------
 if (!(IsAdministrator))
 {
+    "NOTADMIN"
     "Please restart this script from an administrative PowerShell!"
     "NPM cannot be upgraded without administrative rights. To run PowerShell as Administrator,"
     "right-click PowerShell and select 'Run as Administrator'"
