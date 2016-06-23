@@ -44,7 +44,9 @@
     "babel-cli": "^6.10.1",
     "babel-core": "^6.5.2",
     "babel-eslint": "^6.0.4",
+    "babel-plugin-syntax-async-functions": "^6.8.0",
     "babel-plugin-transform-async-to-generator": "^6.7.4",
+    "babel-plugin-transform-regenerator": "^6.9.0",
     "babel-preset-es2015": "^6.5.0",
     "standard": "^7.1.2"
   },
