@@ -26,12 +26,13 @@ Usage: npm-windows-upgrade [options]
 
 Options:
 ```
--h, --help                   Output usage information
--V, --version                Output the version number
--d, --no-dns-check           Disable the internet connectivity test
--p, --no-prompt              Disable the initial confirmation prompt
--n, --npm-path <path>        (Optional) If passed, npm will be upgraded in the specified location
--v, --npm-version <version>  (Optional) If passed, npm will be upgraded/downgraded to the specified version
+-h, --help                        Output usage information
+-V, --version                     Output the version number
+-d, --no-dns-check                Disable the internet connectivity test
+-e, --no-execution-policy-check   Disable the PowerShell execution policy test
+-p, --no-spinner                  Disable the spinner animation
+-n, --npm-path <path>             (Optional) If passed, npm will be upgraded in the specified location
+-v, --npm-version <version>       (Optional) If passed, npm will be upgraded/downgraded to the specified version
 ```
 
 If you have trouble with the script, consider adding parameters manually. A common issue is that the script fails to find npm (and therefore doesn't know where to install it) - in that case, pass the location manually.

@@ -12,9 +12,10 @@ if (!/^win/.test(process.platform)) {
 program
   .version(pack.version)
   .option('-d, --no-dns-check', 'Disable the internet connectivity 5test')
-  .option('--no-spinner', 'Disable the spinner animation')
+  .option('-p, --no-spinner', 'Disable the spinner animation')
   .option('-e, --no-execution-policy-check', 'Disable the PowerShell execution policy test')
   .option('-n, --npm-path <path>', '(Optional) If passed, npm will be upgraded in the specified location')
+  .option('-v, --npm-version <version>', '(Optional) If passed, npm will be upgraded/downgraded to the specified version')
   .option('--no-prompt', '[Deprecated] Use --no-spinner instead')
   .parse(process.argv)
 
