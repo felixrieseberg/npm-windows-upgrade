@@ -85,7 +85,7 @@ class Upgrader {
   async upgradeSimple () {
     this.spinner = new Spinner(`${strings.startingUpgradeSimple} %s`)
 
-    if (this.options.noSpinner || this.options.noSpinner) {
+    if (this.options.noSpinner) {
       console.log(strings.startingUpgradeSimple)
     } else {
       this.spinner.start()
@@ -111,7 +111,7 @@ class Upgrader {
   async upgradeComplex () {
     this.spinner = new Spinner(`${strings.startingUpgradeComplex} %s`)
 
-    if (this.options.noSpinner || this.options.noSpinner) {
+    if (this.options.noSpinner) {
       console.log(strings.startingUpgradeComplex)
     } else {
       this.spinner.start()

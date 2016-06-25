@@ -18,7 +18,7 @@ Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 # Run
 "Starting Upgrade to 3.5.1"
 npm run build
-node .\bin\npm-windows-upgrade --npm-version 3.5.1 --no-prompt
+node .\bin\npm-windows-upgrade --npm-version 3.5.1 --no-spinner
 
 # Check Output
 $npmVersion = npm -v
