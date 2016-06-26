@@ -1,0 +1,7 @@
+node_modules
+src
+test
+.vscode
+appveyor.yml
+.babelrc
+.gitignore
