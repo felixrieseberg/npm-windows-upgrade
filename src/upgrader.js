@@ -15,13 +15,13 @@ class Upgrader {
   constructor (program) {
     this.options = program
 
-    if (this.options.noPrompt) {
-      this.options.noSpinner = true
+    if (this.options.prompt === false) {
+      this.options.spinner = false
     }
   }
 
   async ensureInternet () {
-    if (!this.options.noDnsCheck) {
+    if (!this.options.dnsCheck === false) {
       const isOnline = await utils.checkInternetConnection()
 
       if (!isOnline) {
@@ -31,7 +31,7 @@ class Upgrader {
   }
 
   async ensureExecutionPolicy () {
-    if (!this.options.noExecutionPolicyCheck) {
+    if (!this.options.executionPolicyCheck === false) {
       try {
         const isExecutable = await utils.checkExecutionPolicy()
 
@@ -85,7 +85,7 @@ class Upgrader {
   async upgradeSimple () {
     this.spinner = new Spinner(`${strings.startingUpgradeSimple} %s`)
 
-    if (this.options.noSpinner) {
+    if (this.options.spinner === false) {
       console.log(strings.startingUpgradeSimple)
     } else {
       this.spinner.start()
@@ -111,7 +111,7 @@ class Upgrader {
   async upgradeComplex () {
     this.spinner = new Spinner(`${strings.startingUpgradeComplex} %s`)
 
-    if (this.options.noSpinner) {
+    if (this.options.spinner === false) {
       console.log(strings.startingUpgradeComplex)
     } else {
       this.spinner.start()
