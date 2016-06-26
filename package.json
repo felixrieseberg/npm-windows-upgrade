@@ -10,7 +10,7 @@
     "preversion": "npm run build",
     "test": "standard"
   },
-  "version": "2.3.1",
+  "version": "3.0.0",
   "private": false,
   "preferGlobal": "true",
   "bin": {
