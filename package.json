@@ -14,7 +14,7 @@
   "private": false,
   "preferGlobal": "true",
   "bin": {
-    "npm-windows-upgrade": "./bin/npm-windows-upgrade"
+    "npm-windows-upgrade": "./bin/npm-windows-upgrade.js"
   },
   "repository": "https://github.com/felixrieseberg/npm-windows-upgrade",
   "engines": {
