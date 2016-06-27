@@ -92,14 +92,20 @@ function _getPath () {
       // npm:        -> return npm path
       // nowhere:    -> return powershell path
       if (isFromPowershell) {
-        console.log(strings.npmFoundIn(fromPowershell, fromNpm, fromPowershell))
-        return fromPowershell
+        return {
+          path: fromPowershell,
+          message: strings.npmFoundIn(fromPowershell, fromNpm, fromPowershell)
+        }
       } else if (isFromNpm) {
-        console.log(strings.npmFoundIn(fromPowershell, fromNpm, fromNpm))
-        return fromNpm
+        return {
+          path: fromNpm,
+          message: strings.npmFoundIn(fromPowershell, fromNpm, fromNpm)
+        }
       } else {
-        console.log(strings.npmNotFoundGuessing(fromPowershell, fromNpm, fromPowershell))
-        return fromPowershell
+        return {
+          path: fromPowershell,
+          message: strings.npmNotFoundGuessing(fromPowershell, fromNpm, fromPowershell)
+        }
       }
     })
 }

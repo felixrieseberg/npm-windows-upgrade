@@ -8,7 +8,7 @@
   "scripts": {
     "build": "babel src --out-dir lib --source-maps true",
     "preversion": "npm run build",
-    "test": "standard"
+    "test": "standard && mocha"
   },
   "version": "3.0.1",
   "private": false,

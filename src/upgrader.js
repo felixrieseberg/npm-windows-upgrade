@@ -70,7 +70,11 @@ class Upgrader {
 
   async choosePath () {
     try {
-      this.options.npmPath = await findNpm(this.options.npmPath)
+      const npmPaths = await findNpm(this.options.npmPath)
+
+      this.log(npmPaths.message)
+      this.options.npmPath = npmPaths.path
+
       debug(`Upgrader: Chosen npm path: ${this.options.npmPath}`)
     } catch (err) {
       utils.exit(1, err)
@@ -151,6 +155,12 @@ class Upgrader {
         }
       })
       .catch((err) => console.log(err))
+  }
+
+  log(msg) {
+    if (!this.options.quiet) {
+      console.log(msg)
+    }
   }
 
   logUpgradeFailure (...errors) {

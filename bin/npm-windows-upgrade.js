@@ -16,6 +16,7 @@ program
   .option('-e, --no-execution-policy-check', 'Disable the PowerShell execution policy test')
   .option('-n, --npm-path <path>', '(Optional) If passed, npm will be upgraded in the specified location')
   .option('-v, --npm-version <version>', '(Optional) If passed, npm will be upgraded/downgraded to the specified version')
+  .option('--quiet', 'No output')
   .option('--no-prompt', '[Deprecated] Use --no-spinner instead')
   .parse(process.argv)
 
