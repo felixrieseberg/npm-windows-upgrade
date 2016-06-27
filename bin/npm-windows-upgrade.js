@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+require('babel-polyfill')
+
 var program = require('commander')
 var pack = require('../package.json')
 var Upgrader = require('../lib/upgrader')
@@ -26,7 +28,7 @@ console.log('npm-windows-upgrade v' + pack.version)
 var upgrader = new Upgrader(program)
 
 upgrader.ensureExecutionPolicy()
-  .then(() => upgrader.ensureInternet())
-  .then(() => upgrader.chooseVersion())
-  .then(() => upgrader.choosePath())
-  .then(() => upgrader.upgrade())
+  .then(function () { upgrader.ensureInternet() })
+  .then(function () { upgrader.chooseVersion() })
+  .then(function () { upgrader.choosePath() })
+  .then(function () { upgrader.upgrade() })

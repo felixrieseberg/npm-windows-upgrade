@@ -118,14 +118,15 @@ function _getPath () {
  */
 function _checkPath (npmPath) {
   return new TPromise((resolve, reject) => {
-    const error = `Given path ${npmPath} is not a valid directory.\nPlease ensure that you added the correct path and try again!`
-
     if (npmPath) {
       fs.lstat(npmPath, (err, stats) => {
         if (err || !stats || (stats.isDirectory && !stats.isDirectory())) {
-          reject(error)
+          reject(strings.givenPathNotValid(npmPath))
         } else {
-          resolve(npmPath)
+          resolve({
+            path: npmPath,
+            message: strings.givenPathValid(npmPath)
+          })
         }
       })
     } else {

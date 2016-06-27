@@ -20,8 +20,13 @@ class Upgrader {
     }
   }
 
+  /**
+   * Executes the upgrader's "let's check the user's internet" logic,
+   * eventually quietly resolving or quitting the proccess with an
+   * error if the connection is not sufficient
+   */
   async ensureInternet () {
-    if (!this.options.dnsCheck === false) {
+    if (this.options.dnsCheck !== false) {
       const isOnline = await utils.checkInternetConnection()
 
       if (!isOnline) {
@@ -30,8 +35,13 @@ class Upgrader {
     }
   }
 
+  /**
+   * Executes the upgrader's "let's check the user's powershell exeuction
+   * policy" logic, eventually quietly resolving or quitting the proccess
+   * with an error if the policy is not sufficient
+   */
   async ensureExecutionPolicy () {
-    if (!this.options.executionPolicyCheck === false) {
+    if (this.options.executionPolicyCheck !== false) {
       try {
         const isExecutable = await utils.checkExecutionPolicy()
 
@@ -44,11 +54,19 @@ class Upgrader {
     }
   }
 
+  /**
+   * Checks if the upgrade was successful
+   *
+   * @return {boolean} - was the upgrade successful?
+   */
   async wasUpgradeSuccessful () {
     this.installedVersion = await versions.getInstalledNPMVersion()
     return (this.installedVersion === this.options.npmVersion)
   }
 
+  /**
+   * Executes the upgrader's "let's have the user choose a version" logic
+   */
   async chooseVersion () {
     if (!this.options.npmVersion) {
       const availableVersions = await versions.getAvailableNPMVersions()
@@ -68,6 +86,9 @@ class Upgrader {
     }
   }
 
+  /**
+   * Executes the upgrader's "let's find npm" logic
+   */
   async choosePath () {
     try {
       const npmPaths = await findNpm(this.options.npmPath)
@@ -85,6 +106,7 @@ class Upgrader {
    * Attempts a simple upgrade, eventually calling npm install -g npm
    *
    * @param {string} version - Version that should be installed
+   * @private
    */
   async upgradeSimple () {
     this.spinner = new Spinner(`${strings.startingUpgradeSimple} %s`)
@@ -111,6 +133,7 @@ class Upgrader {
    *
    * @param  {string} version - Version that should be installed
    * @param  {string} npmPath - Path where npm should be installed
+   * @private
    */
   async upgradeComplex () {
     this.spinner = new Spinner(`${strings.startingUpgradeComplex} %s`)
@@ -132,6 +155,9 @@ class Upgrader {
     }
   }
 
+  /**
+   * Executes the full upgrade flow
+   */
   upgrade () {
     debug('Starting upgrade')
 
@@ -157,12 +183,25 @@ class Upgrader {
       .catch((err) => console.log(err))
   }
 
-  log(msg) {
+  /**
+   * Logs a message to console, unless the user specified quiet mode
+   *
+   * @param {string} message - message to log
+   * @private
+   */
+  log (message) {
     if (!this.options.quiet) {
-      console.log(msg)
+      console.log(message)
     }
   }
 
+  /**
+   * If the whole upgrade failed, we use this method to log a
+   * detailed trace with versions - all to make it easier for
+   * users to create meaningful issues.
+   *
+   * @param errors {array} - AS many errors as found
+   */
   logUpgradeFailure (...errors) {
     // Uh-oh, something didn't work as it should have.
     versions.getVersions().then((debugVersions) => {
