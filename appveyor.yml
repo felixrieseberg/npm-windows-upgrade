@@ -9,21 +9,22 @@ init:
 # Test against these versions of Node.js.
 environment:
   matrix:
-    - nodejs_version: "0.10"
     - nodejs_version: "0.12"
     - nodejs_version: "4.0"
-    - nodejs_version: "4.1"
     - nodejs_version: "5.0"
+    - nodejs_version: "6.0"
 
 # Install scripts. (runs after repo cloning)
 install:
+  - ps: Install-Product node $env:nodejs_version
   - npm install
+  - npm run build
 
 # Post-install test scripts.
 test_script:
   # Output useful info for debugging.
-  - ps: npm test
-  - ps: powershell.exe ".\test\test.ps1"
+  - ps: if ($env:nodejs_version -Eq "6.0") { npm run test }
+  - ps: powershell.exe ".\test\full\test.ps1"
 
 # Don't actually build.
 build: off

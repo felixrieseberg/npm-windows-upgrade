@@ -92,14 +92,20 @@ function _getPath () {
       // npm:        -> return npm path
       // nowhere:    -> return powershell path
       if (isFromPowershell) {
-        console.log(strings.npmFoundIn(fromPowershell, fromNpm, fromPowershell))
-        return fromPowershell
+        return {
+          path: fromPowershell,
+          message: strings.npmFoundIn(fromPowershell, fromNpm, fromPowershell)
+        }
       } else if (isFromNpm) {
-        console.log(strings.npmFoundIn(fromPowershell, fromNpm, fromNpm))
-        return fromNpm
+        return {
+          path: fromNpm,
+          message: strings.npmFoundIn(fromPowershell, fromNpm, fromNpm)
+        }
       } else {
-        console.log(strings.npmNotFoundGuessing(fromPowershell, fromNpm, fromPowershell))
-        return fromPowershell
+        return {
+          path: fromPowershell,
+          message: strings.npmNotFoundGuessing(fromPowershell, fromNpm, fromPowershell)
+        }
       }
     })
 }
@@ -112,14 +118,15 @@ function _getPath () {
  */
 function _checkPath (npmPath) {
   return new TPromise((resolve, reject) => {
-    const error = `Given path ${npmPath} is not a valid directory.\nPlease ensure that you added the correct path and try again!`
-
     if (npmPath) {
       fs.lstat(npmPath, (err, stats) => {
         if (err || !stats || (stats.isDirectory && !stats.isDirectory())) {
-          reject(error)
+          reject(strings.givenPathNotValid(npmPath))
         } else {
-          resolve(npmPath)
+          resolve({
+            path: npmPath,
+            message: strings.givenPathValid(npmPath)
+          })
         }
       })
     } else {

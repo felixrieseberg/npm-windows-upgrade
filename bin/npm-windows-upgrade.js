@@ -1,5 +1,7 @@
 #! /usr/bin/env node
 
+require('babel-polyfill')
+
 var program = require('commander')
 var pack = require('../package.json')
 var Upgrader = require('../lib/upgrader')
@@ -16,6 +18,7 @@ program
   .option('-e, --no-execution-policy-check', 'Disable the PowerShell execution policy test')
   .option('-n, --npm-path <path>', '(Optional) If passed, npm will be upgraded in the specified location')
   .option('-v, --npm-version <version>', '(Optional) If passed, npm will be upgraded/downgraded to the specified version')
+  .option('--quiet', 'No output')
   .option('--no-prompt', '[Deprecated] Use --no-spinner instead')
   .parse(process.argv)
 
@@ -25,7 +28,7 @@ console.log('npm-windows-upgrade v' + pack.version)
 var upgrader = new Upgrader(program)
 
 upgrader.ensureExecutionPolicy()
-  .then(() => upgrader.ensureInternet())
-  .then(() => upgrader.chooseVersion())
-  .then(() => upgrader.choosePath())
-  .then(() => upgrader.upgrade())
+  .then(function () { upgrader.ensureInternet() })
+  .then(function () { upgrader.chooseVersion() })
+  .then(function () { upgrader.choosePath() })
+  .then(function () { upgrader.upgrade() })

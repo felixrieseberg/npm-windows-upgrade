@@ -45,7 +45,6 @@ function checkInternetConnection () {
 function checkExecutionPolicy () {
   return new TPromise((resolve, reject) => {
     let output = []
-    let unrestricted
     let child
 
     try {
@@ -67,7 +66,8 @@ function checkExecutionPolicy () {
     })
 
     child.on('exit', () => {
-      unrestricted = !!(output.filter((line) => line.includes('Unrestricted')))
+      const linesHit = output.filter((line) => line.includes('Unrestricted'))
+      const unrestricted = (linesHit.length > 0)
 
       if (!unrestricted) {
         debug('PowerShell: Resolving restricted (false)')
