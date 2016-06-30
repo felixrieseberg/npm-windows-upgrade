@@ -23,6 +23,7 @@ install:
 # Post-install test scripts.
 test_script:
   # Output useful info for debugging.
+  - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
   - ps: if ($env:nodejs_version -Eq "6.0") { npm run test }
   - ps: powershell.exe ".\test\full\test.ps1"
 
