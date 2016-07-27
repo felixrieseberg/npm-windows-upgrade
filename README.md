@@ -71,4 +71,4 @@ Microsoft is working hard to make sure that our users have the best possible exp
 Contributions are extremely welcome! For JavaScript code, please run `grunt test` to check your code against JSCS and JSHint. There's no formal coding guideline for the PowerShell pieces of this tool, but do write code that is commented and comprehensible.
 
 ### License
-MIT, please see `LICENSE` for details. Copyright (c) 2015 Microsoft Corporation
+MIT, please see `LICENSE` for details. Copyright (c) 2015 Felix Rieseberg.
