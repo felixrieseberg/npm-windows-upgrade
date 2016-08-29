@@ -13,7 +13,7 @@ if (!/^win/.test(process.platform)) {
 
 program
   .version(pack.version)
-  .option('-d, --no-dns-check', 'Disable the internet connectivity 5test')
+  .option('-d, --no-dns-check', 'Disable the internet connectivity test')
   .option('-p, --no-spinner', 'Disable the spinner animation')
   .option('-e, --no-execution-policy-check', 'Disable the PowerShell execution policy test')
   .option('-n, --npm-path <path>', '(Optional) If passed, npm will be upgraded in the specified location')
