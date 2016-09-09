@@ -14,7 +14,7 @@ function runUpgrade (version, npmPath) {
   return new TPromise((resolve, reject) => {
     const scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1')
     const psArgs = npmPath === null ? `& {& '${scriptPath}' -version '${version}' }` : `& {& '${scriptPath}' -version '${version}' -NodePath '${npmPath}' }`
-    const args = ['-NoProfile', '-NoLogo', psArgs]
+    const args = ['-ExecutionPolicy', 'Bypass', '-NoProfile', '-NoLogo', psArgs]
 
     if (process.env.DEBUG) {
       args.push('-debug')

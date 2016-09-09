@@ -66,7 +66,7 @@ function checkExecutionPolicy () {
     })
 
     child.on('exit', () => {
-      const linesHit = output.filter((line) => line.includes('Unrestricted'))
+      const linesHit = output.filter((line) => line.includes('Unrestricted') || line.includes('RemoteSigned'))
       const unrestricted = (linesHit.length > 0)
 
       if (!unrestricted) {
