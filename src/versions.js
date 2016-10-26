@@ -30,7 +30,7 @@ function getAvailableNPMVersions () {
     exec('npm view npm versions --json', (err, stdout) => {
       if (err) {
         let error = 'We could not show latest available versions. Try running this script again '
-        error += 'with the version you want to install (npm-windows-upgrade --version:3.0.0)'
+        error += 'with the version you want to install (npm-windows-upgrade --npm-version 3.0.0)'
         return reject(error)
       }
 
@@ -48,7 +48,7 @@ function getLatestNPMVersion () {
     exec('npm show npm version', (err, stdout) => {
       if (err) {
         let error = 'We could not show latest available versions. Try running this script again '
-        error += 'with the version you want to install (npm-windows-upgrade --version:3.0.0)'
+        error += 'with the version you want to install (npm-windows-upgrade --npm-version 3.0.0)'
         return reject(error)
       }
 
