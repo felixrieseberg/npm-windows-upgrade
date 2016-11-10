@@ -1,15 +1,14 @@
 #! /usr/bin/env node
 
+// CHeck for incompatibilities
+require('../lib/compatible')
+
+// Proceed
 require('babel-polyfill')
 
 var program = require('commander')
 var pack = require('../package.json')
 var Upgrader = require('../lib/upgrader')
-
-// Check OS
-if (!/^win/.test(process.platform)) {
-  throw new Error('This script upgrades npm on Windows, but the OS is not Windows.')
-}
 
 program
   .version(pack.version)
