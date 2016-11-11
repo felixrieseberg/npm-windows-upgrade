@@ -19,6 +19,12 @@ npm install --global --production npm-windows-upgrade
 npm-windows-upgrade
 ```
 
+Want to just install the latest version? Sure:
+
+```
+npm-windows-upgrade --npm-version latest
+```
+
 The tool will show you a list of all the published and available versions of npm (including pre-release and beta versions). Choose the one you want to install and let it do its thing!
 
 #### Advanced Usage
