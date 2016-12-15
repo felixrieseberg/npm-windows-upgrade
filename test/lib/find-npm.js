@@ -58,7 +58,7 @@ describe('Find-Npm', () => {
         const expectedCmd = 'npm config --global get prefix'
         const expectedProcess = 'powershell.exe'
         const expectedPsArgs = 'Get-Command npm | Select-Object -ExpandProperty Definition'
-        const expectedArgs = ['-ExecutionPolicy', 'Bypass', '-NoProfile', '-NoLogo', expectedPsArgs]
+        const expectedArgs = ['-NoProfile', '-NoLogo', expectedPsArgs]
 
         passedCmd.should.be.equal(expectedCmd)
         passedProcess.should.be.equal(expectedProcess)
