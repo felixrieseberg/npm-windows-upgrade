@@ -58,7 +58,7 @@ describe('Find-Npm', () => {
         const expectedCmd = 'npm config --global get prefix'
         const expectedProcess = 'powershell.exe'
         const expectedPsArgs = 'Get-Command npm | Select-Object -ExpandProperty Definition'
-        const expectedArgs = ['-NoProfile', '-NoLogo', expectedPsArgs]
+        const expectedArgs = ['-ExecutionPolicy', 'Bypass', '-NoProfile', '-NoLogo', expectedPsArgs]
 
         passedCmd.should.be.equal(expectedCmd)
         passedProcess.should.be.equal(expectedProcess)
@@ -76,7 +76,7 @@ describe('Find-Npm', () => {
 
     mockery.registerMock('child_process', cpMock)
     mockery.registerMock('./utils', utilMock)
-    
+
     const findNpm = require('../../lib/find-npm')
     execReturnValue = 'C:\\test-npm\n'
 
@@ -115,7 +115,7 @@ describe('Find-Npm', () => {
 
     mockery.registerMock('child_process', cpMock)
     mockery.registerMock('./utils', utilMock)
-    
+
     const findNpm = require('../../lib/find-npm')
     execReturnValue = 'C:\\test-npm\n'
 
@@ -152,7 +152,7 @@ describe('Find-Npm', () => {
     }
 
     mockery.registerMock('fs', fsMock)
-    
+
     const findNpm = require('../../lib/find-npm')
 
     findNpm('C:\\test-path')

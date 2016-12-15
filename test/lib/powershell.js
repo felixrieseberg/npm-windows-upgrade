@@ -48,7 +48,7 @@ describe('Powershell', () => {
         const expectedScriptPath = path.resolve(__dirname, '../../powershell/upgrade-npm.ps1')
         const expectedProcess = 'powershell.exe'
         const expectedPsArgs = `& {& '${expectedScriptPath}' -version 'v1.0.0' -NodePath 'C://test//path' }`
-        const expectedArgs = ['-NoProfile', '-NoLogo', expectedPsArgs]
+        const expectedArgs = ['-ExecutionPolicy', 'Bypass', '-NoProfile', '-NoLogo', expectedPsArgs]
 
         passedProcess.should.be.equal(expectedProcess)
         passedArgs.should.be.deep.equal(expectedArgs)
@@ -71,7 +71,7 @@ describe('Powershell', () => {
         const expectedScriptPath = path.resolve(__dirname, '../../powershell/upgrade-npm.ps1')
         const expectedProcess = 'powershell.exe'
         const expectedPsArgs = 'npm install -g npm@v1.0.0'
-        const expectedArgs = ['-NoProfile', '-NoLogo', expectedPsArgs]
+        const expectedArgs = ['-ExecutionPolicy', 'Bypass', '-NoProfile', '-NoLogo', expectedPsArgs]
 
         passedProcess.should.be.equal(expectedProcess)
         passedArgs.should.be.deep.equal(expectedArgs)
