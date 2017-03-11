@@ -127,8 +127,11 @@ describe('Upgrader', () => {
     const Upgrader = require('../../lib/upgrader')
     const upgrader = new Upgrader({ npmVersion: 'v1.0.0' })
 
-    upgrader.ensureExecutionPolicy()
-      .then(() => done())
+    upgrader.wasUpgradeSuccessful()
+      .then((result) => {
+        result.should.be.true
+        done()
+      })
       .catch(err => console.log(err))
   })
 
@@ -142,8 +145,11 @@ describe('Upgrader', () => {
     const Upgrader = require('../../lib/upgrader')
     const upgrader = new Upgrader({ npmVersion: 'v1.0.0' })
 
-    upgrader.ensureExecutionPolicy()
-      .then(() => done())
+    upgrader.wasUpgradeSuccessful()
+      .then((result) => {
+        result.should.be.false
+        done()
+      })
       .catch(err => console.log(err))
   })
 })

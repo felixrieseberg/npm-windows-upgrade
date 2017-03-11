@@ -16,14 +16,14 @@ Catch [system.exception]
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 
 # Run
-"Starting Upgrade to 3.5.1"
+"Starting Upgrade to 4.0.0"
 npm run build
-node .\bin\npm-windows-upgrade --npm-version 3.5.1 --no-spinner
+node .\bin\npm-windows-upgrade --npm-version 4.0.0 --no-spinner
 
 # Check Output
 $npmVersion = npm -v
-if ($npmVersion -Eq "3.5.1") {
-    "Successfully upgraded npm to 3.5.1"
+if ($npmVersion -Eq "4.0.0") {
+    "Successfully upgraded npm to 4.0.0"
     exit 0
 } else {
     "Could not upgrade npm, current version is" + $npmVersion
