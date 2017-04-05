@@ -1,7 +1,5 @@
-const spawn = require('child_process').spawn
-const exec = require('child_process').exec
+const { spawn, exec } = require('child_process')
 const fs = require('fs')
-const TPromise = require('promise')
 const path = require('path')
 
 const utils = require('./utils')
@@ -14,7 +12,7 @@ const strings = require('./strings')
  * @returns {Promise.<string>} - Promise that resolves with the found path (or null if not found)
  */
 function _getPathFromNpm () {
-  return new TPromise((resolve) => {
+  return new Promise((resolve) => {
     exec('npm config --global get prefix', (err, stdout) => {
       if (err) {
         resolve(null)
@@ -33,7 +31,7 @@ function _getPathFromNpm () {
  * @returns {Promise.<string>} - Promise that resolves with the found path (or null if not found)
  */
 function _getPathFromPowerShell () {
-  return new TPromise(resolve => {
+  return new Promise(resolve => {
     const psArgs = 'Get-Command npm | Select-Object -ExpandProperty Definition'
     const args = ['-NoProfile', '-NoLogo', psArgs]
     const child = spawn('powershell.exe', args)
@@ -76,7 +74,7 @@ function _getPathFromPowerShell () {
  * @return {Promise.<string>} - NodeJS installation path
  */
 function _getPath () {
-  return TPromise.all([_getPathFromPowerShell(), _getPathFromNpm()])
+  return Promise.all([_getPathFromPowerShell(), _getPathFromNpm()])
     .then((results) => {
       const fromNpm = results[1] || ''
       const fromPowershell = results[0] || ''
@@ -117,11 +115,11 @@ function _getPath () {
  * @returns {Promise.<string>}
  */
 function _checkPath (npmPath) {
-  return new TPromise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     if (npmPath) {
       fs.lstat(npmPath, (err, stats) => {
         if (err || !stats || (stats.isDirectory && !stats.isDirectory())) {
-          reject(strings.givenPathNotValid(npmPath))
+          reject(new Error(strings.givenPathNotValid(npmPath)))
         } else {
           resolve({
             path: npmPath,
@@ -130,7 +128,7 @@ function _checkPath (npmPath) {
         }
       })
     } else {
-      reject('Called _checkPath() with insufficient parameters')
+      reject(new Error('Called _checkPath() with insufficient parameters'))
     }
   })
 }

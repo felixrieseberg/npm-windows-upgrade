@@ -1,6 +1,5 @@
-const TPromise = require('promise')
 const fs = require('fs')
-const spawn = require('child_process').spawn
+const { spawn } = require('child_process')
 
 // Internal Modules
 const debug = require('./debug')
@@ -26,7 +25,7 @@ function exit (status, ...messages) {
  * @return {Promise.<boolean>} - True if lookup succeeded (or if we skip the test)
  */
 function checkInternetConnection () {
-  return new TPromise((resolve) => {
+  return new Promise((resolve) => {
     require('dns').lookup('microsoft.com', (err) => {
       if (err && err.code === 'ENOTFOUND') {
         resolve(false)
@@ -43,7 +42,7 @@ function checkInternetConnection () {
  * @return {Promise.<boolean>} - True if unrestricted, false if it isn't
  */
 function checkExecutionPolicy () {
-  return new TPromise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     let output = []
     let child
 

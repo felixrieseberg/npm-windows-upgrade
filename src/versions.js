@@ -1,18 +1,17 @@
 const exec = require('child_process').exec
 const nwuVersion = require('../package.json').version
-const TPromise = require('promise')
 
 /**
  * Gets the currently installed version of npm (npm -v)
  * @return {Promise.<string>} - Installed version of npm
  */
 function getInstalledNPMVersion () {
-  return new TPromise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     let nodeVersion
 
     exec('npm -v', (err, stdout) => {
       if (err) {
-        reject('Could not determine npm version.')
+        reject(new Error('Could not determine npm version.'))
       } else {
         nodeVersion = stdout.replace(/\n/, '')
         resolve(nodeVersion)
@@ -26,7 +25,7 @@ function getInstalledNPMVersion () {
  * @return {Promise.<versions[]>} - Array of the available versions
  */
 function getAvailableNPMVersions () {
-  return new TPromise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     exec('npm view npm versions --json', (err, stdout) => {
       if (err) {
         let error = 'We could not show latest available versions. Try running this script again '
@@ -44,7 +43,7 @@ function getAvailableNPMVersions () {
  * @return {Promise.<version>} - Array of the available versions
  */
 function getLatestNPMVersion () {
-  return new TPromise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     exec('npm show npm version', (err, stdout) => {
       if (err) {
         let error = 'We could not show latest available versions. Try running this script again '
@@ -63,7 +62,7 @@ function getLatestNPMVersion () {
  * Get the current name and version of Windows
  */
 function _getWindowsVersion () {
-  return new TPromise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const command = 'systeminfo | findstr /B /C:"OS Name" /C:"OS Version"'
     exec(command, (error, stdout) => {
       if (error) {
@@ -79,7 +78,7 @@ function _getWindowsVersion () {
  * Get installed versions of virtually everything important
  */
 function getVersions () {
-  return new TPromise((resolve) => {
+  return new Promise((resolve) => {
     let versions = process.versions
     let prettyVersions = ''
     versions.os = process.platform + ' ' + process.arch

@@ -1,4 +1,4 @@
-const Spinner = require('cli-spinner').Spinner
+const { Spinner } = require('cli-spinner')
 const chalk = require('chalk')
 const inquirer = require('inquirer')
 
@@ -9,6 +9,7 @@ const versions = require('./versions')
 const findNpm = require('./find-npm')
 const debug = require('./debug')
 
+// eslint-disable-next-line no-use-before-define
 const regeneratorRuntime = regeneratorRuntime || require('regenerator-runtime-only')
 
 class Upgrader {

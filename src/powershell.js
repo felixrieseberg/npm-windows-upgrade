@@ -1,6 +1,5 @@
-const spawn = require('child_process').spawn
+const {spawn} = require('child_process')
 const path = require('path')
-const TPromise = require('promise')
 
 const debug = require('./debug')
 
@@ -11,7 +10,7 @@ const debug = require('./debug')
  * @return {Promise.<stderr[], stdout[]>} - stderr and stdout received from the PS1 process
  */
 function runUpgrade (version, npmPath) {
-  return new TPromise((resolve, reject) => {
+  return new Promise((resolve, reject) => {
     const scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1')
     const psArgs = npmPath === null ? `& {& '${scriptPath}' -version '${version}' }` : `& {& '${scriptPath}' -version '${version}' -NodePath '${npmPath}' }`
     const args = ['-ExecutionPolicy', 'Bypass', '-NoProfile', '-NoLogo', psArgs]
@@ -51,7 +50,7 @@ function runUpgrade (version, npmPath) {
  * @return {Promise.<stderr[], stdout[]>} - stderr and stdout received from the PS1 process
  */
 function runSimpleUpgrade (version) {
-  return new TPromise((resolve) => {
+  return new Promise((resolve) => {
     let npmCommand = (version) ? `npm install -g npm@${version}` : 'npm install -g npm'
     let stdout = []
     let stderr = []
