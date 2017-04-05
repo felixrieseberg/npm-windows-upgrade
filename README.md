@@ -55,6 +55,9 @@ npm-windows-upgrade --npm-version 3.5.0
 
 To override the internet connection check, pass `--no-dns-check`. To disable the initial prompt, pass `--no-prompt`.
 
+#### Debug Mode
+To see debug output, set a `DEBUG` environment variable (`$env:DEBUG="npm-windows-upgrade"`)
+
 ### Issues & Support
 Please do [report your issues on GitHub](https://github.com/felixrieseberg/npm-windows-upgrade/issues). There are a bunch of Windows versions, hundreds of different ways to install Node and npm, and it's likely that this script won't work with a few of them. If you run into trouble and need npm upgraded as soon as possible, [please follow the manual instructions](https://github.com/npm/npm/wiki/Troubleshooting#upgrading-on-windows).
 
