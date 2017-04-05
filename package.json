@@ -59,6 +59,7 @@
     "commander": "~2.9.0",
     "inquirer": "~1.2.2",
     "promise": "~7.1.0",
+    "debug": "^2.6.3",
     "prompt": "~1.0.0",
     "regenerator-runtime-only": "~0.8.38",
     "babel-polyfill": "^6.16.0"
