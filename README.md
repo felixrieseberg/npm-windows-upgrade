@@ -1,7 +1,7 @@
-## Upgrade npm on Windows 
+## Upgrade npm on Windows
 <a href="https://ci.appveyor.com/project/felixrieseberg/npm-windows-upgrade/branch/master"><img src="https://ci.appveyor.com/api/projects/status/8mk8qvno71xt30if/branch/master?svg=true" alt="windows build status" height="18" /></a>
 <a href="http://badge.fury.io/js/npm-windows-upgrade"><img src="https://badge.fury.io/js/npm-windows-upgrade.svg" alt="npm version" height="18"></a> <a href="https://david-dm.org/felixrieseberg/npm-windows-upgrade"><img src="https://david-dm.org/felixrieseberg/npm-windows-upgrade.svg" alt="dependencies" height="18px"></a> <img src="https://img.shields.io/npm/dm/npm-windows-upgrade.svg" height="18px" />
-Upgrading npm on Windows requires manual steps to ensure that PowerShell/CMD find the new version of npm. This is a small tool made by Microsoft DX engineers with :heart: for npm and Node, reducing the process to a simple command.
+Upgrading npm on Windows requires manual steps to ensure that PowerShell/CMD find the new version of npm. This is a small tool made with :heart: for npm and Node, reducing the process to a simple command.
 
 ![](https://raw.githubusercontent.com/felixrieseberg/npm-windows-upgrade/gh-pages/screenshot.png)
 
@@ -12,7 +12,7 @@ First, ensure that you can execute scripts on your system by running the followi
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 ```
 
-Then, to install and use this upgrader tool, run (also from an elevated PowerShell or cmd.exe):
+Then, to install and use this upgrader tool, run the following command (also from an elevated PowerShell or cmd.exe). Note: If you're running a Node version lower than 4.0, please use `npm-windows-upgrade@3.1.1`, which is the last version to support older versions of Node.js.
 
 ```
 npm install --global --production npm-windows-upgrade
@@ -58,7 +58,7 @@ To override the internet connection check, pass `--no-dns-check`. To disable the
 ### Issues & Support
 Please do [report your issues on GitHub](https://github.com/felixrieseberg/npm-windows-upgrade/issues). There are a bunch of Windows versions, hundreds of different ways to install Node and npm, and it's likely that this script won't work with a few of them. If you run into trouble and need npm upgraded as soon as possible, [please follow the manual instructions](https://github.com/npm/npm/wiki/Troubleshooting#upgrading-on-windows).
 
-This tool was made by Microsoft with :heart: for npm and Node, but it is provided "as is", without warranty of any kind, expressed or
+This tool was made with :heart: for npm and Node, but it is provided "as is", without warranty of any kind, expressed or
 implied. For details, please consult the `LICENSE` file.
 
 ##### Fix an Attempted Upgrade
