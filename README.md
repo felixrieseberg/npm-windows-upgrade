@@ -73,6 +73,9 @@ Chances are that you attempted to upgrade npm before, it somehow failed, and you
  * Edit your `PATH` and remove everything that references npm (to do so, hit "Start" and search for "Environment Variables").
  * Reinstall Node, then install this tool - and only use this tool to upgrade npm, do not attempt to run `npm install npm`.
 
+Used Chocolatey?:
+if you used chocolatey(https://chocolatey.org/) to install node, be sure to check if npm is removed from the `choco\bin` directory by running the following command: `where.exe npm` if the you find it, then you will need to either `choco uninstall npm` or delete the files from this bin directory.
+
 ### More Useful Node.js Stuff
 Microsoft is working hard to make sure that our users have the best possible experience with Node.js. For a helpful set of content that makes it easier to avoid any potential gotchas, [go check out our Node.js Guidelines](https://github.com/microsoft/nodejs-guidelines) - a collection of tips and advanced best practices!
 
