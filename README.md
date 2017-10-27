@@ -50,7 +50,7 @@ npm-windows-upgrade --npm-path "C:\nodejs"
 To manually specify a version to install, pass the `version` parameter:
 
 ```
-npm-windows-upgrade --npm-version 3.5.0
+npm-windows-upgrade --npm-version 5.5.0
 ```
 
 To override the internet connection check, pass `--no-dns-check`. To disable the initial prompt, pass `--no-prompt`.
@@ -73,8 +73,8 @@ Chances are that you attempted to upgrade npm before, it somehow failed, and you
  * Edit your `PATH` and remove everything that references npm (to do so, hit "Start" and search for "Environment Variables").
  * Reinstall Node, then install this tool - and only use this tool to upgrade npm, do not attempt to run `npm install npm`.
 
-Used Chocolatey?:
-if you used chocolatey(https://chocolatey.org/) to install node, be sure to check if npm is removed from the `choco\bin` directory by running the following command: `where.exe npm` if the you find it, then you will need to either `choco uninstall npm` or delete the files from this bin directory.
+> :memp: Used Chocolatey?
+If you used Chocolatey (https://chocolatey.org/) to install Node.js, be sure to check if npm is removed from the `choco\bin` directory by running the following command: `where.exe npm`. Should it still be there, you will need to either `choco uninstall npm` or delete the files from this bin directory.
 
 ### More Useful Node.js Stuff
 Microsoft is working hard to make sure that our users have the best possible experience with Node.js. For a helpful set of content that makes it easier to avoid any potential gotchas, [go check out our Node.js Guidelines](https://github.com/microsoft/nodejs-guidelines) - a collection of tips and advanced best practices!
@@ -83,4 +83,4 @@ Microsoft is working hard to make sure that our users have the best possible exp
 Contributions are extremely welcome! For JavaScript code, please run `grunt test` to check your code against JSCS and JSHint. There's no formal coding guideline for the PowerShell pieces of this tool, but do write code that is commented and comprehensible.
 
 ### License
-MIT, please see `LICENSE` for details. Copyright (c) 2015 Felix Rieseberg.
+MIT, please see `LICENSE` for details. Copyright (c) 2015 - 2017 Felix Rieseberg.
