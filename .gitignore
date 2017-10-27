@@ -28,3 +28,5 @@ node_modules
 
 lib
 !test/lib
+
+yarn-error.log

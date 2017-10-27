@@ -5,3 +5,4 @@ test
 appveyor.yml
 .babelrc
 .gitignore
+yarn-error.log
