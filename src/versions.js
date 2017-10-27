@@ -80,19 +80,19 @@ function _getWindowsVersion () {
 function getVersions () {
   return new Promise((resolve) => {
     let versions = process.versions
-    let prettyVersions = ''
+    let prettyVersions = []
     versions.os = process.platform + ' ' + process.arch
 
     for (let variable in versions) {
       if (versions.hasOwnProperty(variable)) {
-        prettyVersions += `${variable}: ${versions[variable]}`
+        prettyVersions.push(`${variable}: ${versions[variable]}`)
       }
     }
 
     _getWindowsVersion()
       .then((windowsVersion) => {
-        prettyVersions += windowsVersion.replace(/  +/g, ' ') // eslint-disable-line no-regex-spaces
-        resolve(prettyVersions)
+        prettyVersions.push(windowsVersion.replace(/  +/g, ' ')) // eslint-disable-line no-regex-spaces
+        resolve(prettyVersions.join(' | '))
       })
   })
 }
