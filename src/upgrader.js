@@ -210,8 +210,8 @@ class Upgrader {
 
       if (this.options.npmVersion && this.installedVersion) {
         info = `You wanted to install npm ${this.options.npmVersion}, but the installed version is ${this.installedVersion}.\n\n`
-        info += 'A common reason is an attempted "npm install npm" or "npm upgrade npm".'
-        info += 'As of today, the only solution is to completely uninstall and then reinstall Node.js.'
+        info += 'A common reason is an attempted "npm install npm" or "npm upgrade npm". '
+        info += 'As of today, the only solution is to completely uninstall and then reinstall Node.js. '
         info += 'For a small tutorial, please see http://aka.ms/fix-npm-upgrade.\n'
       } else if (this.options.npmVersion) {
         info = `You wanted to install npm ${this.options.npmVersion}, but we could not confirm that the installation succeeded.`
@@ -219,7 +219,7 @@ class Upgrader {
         info = 'We encountered an error during installation.\n'
       }
 
-      info += 'Please consider reporting your trouble to http://aka.ms/npm-issues.'
+      info += '\nPlease consider reporting your trouble to http://aka.ms/npm-issues.'
 
       console.log(chalk.red(info))
       console.log(chalk.bold('\nDebug Information:\n'))
