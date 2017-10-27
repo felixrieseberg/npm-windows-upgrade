@@ -18,7 +18,7 @@ function _getPathFromNpm () {
         resolve(null)
       } else {
         const npmPath = stdout.replace(/\n/, '')
-        debug(`PowerShell: _getPathFromNpm() resoving with: ${npmPath}`)
+        debug(`PowerShell: _getPathFromNpm() resolving with: ${npmPath}`)
         resolve(npmPath)
       }
     })
@@ -33,7 +33,7 @@ function _getPathFromNpm () {
 function _getPathFromPowerShell () {
   return new Promise(resolve => {
     const psArgs = 'Get-Command npm | Select-Object -ExpandProperty Definition'
-    const args = ['-NoProfile', '-NoLogo', psArgs]
+    const args = [ '-NoProfile', '-NoLogo', psArgs ]
     const child = spawn('powershell.exe', args)
 
     let stdout = []
@@ -56,7 +56,7 @@ function _getPathFromPowerShell () {
         // We're probably installed in a location like C:\Program Files\nodejs\npm.cmd,
         // meaning that we should not use the global prefix installation location
         const npmPath = cmdPath.slice(0, cmdPath.length - 8)
-        debug(`PowerShell: _getPathFromPowerShell() resoving with: ${npmPath}`)
+        debug(`PowerShell: _getPathFromPowerShell() resolving with: ${npmPath}`)
         resolve(npmPath)
       } else {
         resolve(null)
@@ -82,8 +82,8 @@ function _getPath () {
       // Quickly check if there's an npm folder in there
       const fromPowershellPath = path.join(fromPowershell, 'node_modules', 'npm')
       const fromNpmPath = path.join(fromNpm, 'node_modules', 'npm')
-      const isFromPowershell = utils.isPathExists(fromPowershellPath)
-      const isFromNpm = utils.isPathExists(fromNpmPath)
+      const isFromPowershell = utils.isPathAccessible(fromPowershellPath)
+      const isFromNpm = utils.isPathAccessible(fromNpmPath)
 
       // Found in...
       // Powershell: -> return powershell path

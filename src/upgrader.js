@@ -164,7 +164,7 @@ class Upgrader {
 
     return this.upgradeComplex()
       .then(() => this.wasUpgradeSuccessful())
-      .then(isDone => {
+      .then((isDone) => {
         if (isDone) {
           // Awesome, the upgrade worked!
           utils.exit(0, strings.upgradeFinished(this.installedVersion))
@@ -173,7 +173,7 @@ class Upgrader {
         }
       })
       .then(() => this.wasUpgradeSuccessful())
-      .then(isDone => {
+      .then((isDone) => {
         if (isDone) {
           // Awesome, the upgrade worked!
           utils.exit(0, strings.upgradeFinished(this.installedVersion))
@@ -222,7 +222,6 @@ class Upgrader {
       info += 'Please consider reporting your trouble to http://aka.ms/npm-issues.'
 
       console.log(chalk.red(info))
-
       console.log(chalk.bold('\nDebug Information:\n'))
       console.log(debugVersions)
 

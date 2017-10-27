@@ -12,8 +12,10 @@ const debug = require('./debug')
 function runUpgrade (version, npmPath) {
   return new Promise((resolve, reject) => {
     const scriptPath = path.resolve(__dirname, '../powershell/upgrade-npm.ps1')
-    const psArgs = npmPath === null ? `& {& '${scriptPath}' -version '${version}' }` : `& {& '${scriptPath}' -version '${version}' -NodePath '${npmPath}' }`
-    const args = ['-ExecutionPolicy', 'Bypass', '-NoProfile', '-NoLogo', psArgs]
+    const psArgs = npmPath === null
+      ? `& {& '${scriptPath}' -version '${version}' }`
+      : `& {& '${scriptPath}' -version '${version}' -NodePath '${npmPath}' }`
+    const args = [ '-ExecutionPolicy', 'Bypass', '-NoProfile', '-NoLogo', psArgs ]
 
     if (process.env.DEBUG) {
       args.push('-debug')
@@ -57,16 +59,16 @@ function runSimpleUpgrade (version) {
     let child
 
     try {
-      child = spawn('powershell.exe', ['-NoProfile', '-NoLogo', npmCommand])
+      child = spawn('powershell.exe', [ '-NoProfile', '-NoLogo', npmCommand ])
     } catch (error) {
       // This is dirty, but the best way for us to try/catch right now
-      resolve({error})
+      resolve({ error })
     }
 
     child.stdout.on('data', (data) => stdout.push(data.toString()))
     child.stderr.on('data', (data) => stderr.push(data.toString()))
 
-    child.on('exit', () => resolve({stderr, stdout}))
+    child.on('exit', () => resolve({ stderr, stdout }))
 
     child.stdin.end()
   })
