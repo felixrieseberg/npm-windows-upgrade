@@ -40,7 +40,7 @@ describe('Utils', () => {
 
       utils.checkInternetConnection()
         .then((result) => {
-          result.should.be.equal.true
+          result.should.be.true
           done()
         })
         .catch(err => console.log(err))
@@ -57,7 +57,7 @@ describe('Utils', () => {
 
       utils.checkInternetConnection()
         .then(result => {
-          result.should.be.equal.false
+          result.should.be.false
           done()
         })
         .catch(err => console.log(err))
@@ -108,19 +108,19 @@ describe('Utils', () => {
     })
   })
 
-  describe('isPathExists', () => {
+  describe('isPathAccessible', () => {
     it('should return true if the path is exists', () => {
       const utils = require('../../lib/utils')
-      const thisExists = utils.isPathExists(__dirname)
+      const thisExists = utils.isPathAccessible(__dirname)
 
-      thisExists.should.be.equal.true
+      thisExists.should.be.true
     })
 
-    it('should return true if the path does not exists', () => {
+    it('should return false if the path does not exists', () => {
       const utils = require('../../lib/utils')
-      const thisExists = utils.isPathExists('C:\\fake-path\\')
+      const thisExists = utils.isPathAccessible('C:\\fake-path\\')
 
-      thisExists.should.be.equal.false
+      thisExists.should.be.false
     })
   })
 })

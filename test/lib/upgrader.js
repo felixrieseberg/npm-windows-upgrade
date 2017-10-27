@@ -43,7 +43,7 @@ describe('Upgrader', () => {
       spinner: false
     })
 
-    upgrader.options.spinner.should.be.equal.false
+    upgrader.options.spinner.should.be.false
   })
 
   it('ensureInternet() should not exit if there is internet', (done) => {

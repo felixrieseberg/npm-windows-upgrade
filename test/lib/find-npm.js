@@ -71,7 +71,7 @@ describe('Find-Npm', () => {
 
   it(`should remove newlines from npm's output`, (done) => {
     const utilMock = {
-      isPathExists: (path) => path.includes('test-npm')
+      isPathAccessible: (path) => path.includes('test-npm')
     }
 
     mockery.registerMock('child_process', cpMock)
@@ -83,7 +83,7 @@ describe('Find-Npm', () => {
     findNpm()
       .then(result => {
         const containsOnlyOneNewline = result.message.includes('C:\\test-npm\n\u001b')
-        containsOnlyOneNewline.should.be.equal.true
+        containsOnlyOneNewline.should.be.true;
         done()
       })
       .catch(err => console.log(err))
@@ -110,7 +110,7 @@ describe('Find-Npm', () => {
 
   it(`should prefer npm over PowerShell (if PowerShell does not exist)`, (done) => {
     const utilMock = {
-      isPathExists: (path) => (path.includes('test-npm'))
+      isPathAccessible: (path) => (path.includes('test-npm'))
     }
 
     mockery.registerMock('child_process', cpMock)
@@ -129,7 +129,7 @@ describe('Find-Npm', () => {
 
   it(`should prefer PowerShell (if it can't confirm either)`, (done) => {
     const utilMock = {
-      isPathExists: () => false
+      isPathAccessible: () => false
     }
 
     mockery.registerMock('child_process', cpMock)
