@@ -87,13 +87,13 @@ function checkExecutionPolicy () {
  * @param filePath - file path to check
  * @returns {boolean} - does the file path exist?
  */
-function isPathExists (filePath) {
+function isPathAccessible (filePath) {
   try {
     fs.accessSync(filePath)
-    debug(`Utils: isPathExists(): ${filePath} exists`)
+    debug(`Utils: isPathAccessible(): ${filePath} exists`)
     return true
   } catch (err) {
-    debug(`Utils: isPathExists(): ${filePath} does not exist`)
+    debug(`Utils: isPathAccessible(): ${filePath} does not exist`)
     return false
   }
 }
@@ -102,5 +102,5 @@ module.exports = {
   checkInternetConnection,
   checkExecutionPolicy,
   exit,
-  isPathExists
+  isPathAccessible
 }
