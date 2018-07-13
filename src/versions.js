@@ -77,24 +77,27 @@ function _getWindowsVersion () {
 /**
  * Get installed versions of virtually everything important
  */
-function getVersions () {
-  return new Promise((resolve) => {
-    let versions = process.versions
-    let prettyVersions = []
-    versions.os = process.platform + ' ' + process.arch
+async function getVersions () {
+  let versions = process.versions
+  let prettyVersions = []
+  versions.os = process.platform + ' ' + process.arch
 
-    for (let variable in versions) {
-      if (versions.hasOwnProperty(variable)) {
-        prettyVersions.push(`${variable}: ${versions[variable]}`)
-      }
+  for (let variable in versions) {
+    if (versions.hasOwnProperty(variable)) {
+      prettyVersions.push(`${variable}: ${versions[variable]}`)
     }
+  }
 
-    _getWindowsVersion()
-      .then((windowsVersion) => {
-        prettyVersions.push(windowsVersion.replace(/  +/g, ' ')) // eslint-disable-line no-regex-spaces
-        resolve(prettyVersions.join(' | '))
-      })
-  })
+  try {
+    const windowsVersion = await _getWindowsVersion();
+    prettyVersions.push(windowsVersion.replace(/  +/g, ' ')) // eslint-disable-line no-regex-spaces
+  } catch (error) {
+    // Do nothing, we're okay with this failing.
+    // Most common reason is we're not on an english
+    // Windows.
+  }
+
+  return prettyVersions.join(' | ')
 }
 
 module.exports = {
