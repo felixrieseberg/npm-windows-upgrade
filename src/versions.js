@@ -89,7 +89,7 @@ async function getVersions () {
   }
 
   try {
-    const windowsVersion = await _getWindowsVersion();
+    const windowsVersion = await _getWindowsVersion()
     prettyVersions.push(windowsVersion.replace(/  +/g, ' ')) // eslint-disable-line no-regex-spaces
   } catch (error) {
     // Do nothing, we're okay with this failing.
