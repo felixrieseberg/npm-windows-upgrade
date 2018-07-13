@@ -58,7 +58,7 @@
     "cli-spinner": "~0.2.8",
     "commander": "~2.16.0",
     "debug": "^3.1.0",
-    "inquirer": "~3.3.0",
+    "inquirer": "~6.0.0",
     "prompt": "~1.0.0",
     "regenerator-runtime-only": "~0.8.38"
   },
