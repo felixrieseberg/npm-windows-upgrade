@@ -9,7 +9,7 @@
     "preversion": "npm run build",
     "test": "standard \"./src/*.js\" && mocha"
   },
-  "version": "4.1.1",
+  "version": "5.0.0",
   "private": false,
   "preferGlobal": true,
   "bin": {
