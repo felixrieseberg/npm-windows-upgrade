@@ -12,7 +12,7 @@ First, ensure that you can execute scripts on your system by running the followi
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 ```
 
-Then, to install and use this upgrader tool, run the following command (also from an elevated PowerShell or cmd.exe). Note: If you're running a Node version lower than 4.0, please use `npm-windows-upgrade@3.1.1`, which is the last version to support older versions of Node.js.
+Then, to install and use this upgrader tool, run the following command (also from an elevated PowerShell or cmd.exe). Note: This tool requires at least Node v6. For Node versions lower than 4.0, please use `npm-windows-upgrade@3.1.1`, for Node versions lower than 6.0, please use `npm-windows-upgrade@4.1.1`.
 
 ```
 npm install --global --production npm-windows-upgrade
