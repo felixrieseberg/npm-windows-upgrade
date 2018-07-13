@@ -23,7 +23,7 @@ class Upgrader {
 
   /**
    * Executes the upgrader's "let's check the user's internet" logic,
-   * eventually quietly resolving or quitting the proccess with an
+   * eventually quietly resolving or quitting the process with an
    * error if the connection is not sufficient
    */
   async ensureInternet () {
@@ -37,8 +37,8 @@ class Upgrader {
   }
 
   /**
-   * Executes the upgrader's "let's check the user's powershell exeuction
-   * policy" logic, eventually quietly resolving or quitting the proccess
+   * Executes the upgrader's "let's check the user's powershell execution
+   * policy" logic, eventually quietly resolving or quitting the process
    * with an error if the policy is not sufficient
    */
   async ensureExecutionPolicy () {
