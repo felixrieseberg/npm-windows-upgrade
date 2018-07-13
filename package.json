@@ -28,7 +28,7 @@
   "author": {
     "email": "felix@felixrieseberg.com",
     "name": "Felix Rieseberg",
-    "url": "http://www.felixrieseberg.com"
+    "url": "https://www.felixrieseberg.com"
   },
   "bugs": {
     "url": "https://github.com/felixrieseberg/npm-windows-upgrade/issues"
@@ -37,7 +37,7 @@
   "licenses": [
     {
       "type": "MIT",
-      "url": "http://github.com/felixrieseberg/npm-windows-upgrade/blob/master/LICENSE"
+      "url": "https://github.com/felixrieseberg/npm-windows-upgrade/blob/master/LICENSE"
     }
   ],
   "devDependencies": {
