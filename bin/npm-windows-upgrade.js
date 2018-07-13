@@ -1,6 +1,6 @@
 #! /usr/bin/env node
 
-// CHeck for incompatibilities
+// Check for incompatibilities
 require('../lib/compatible')
 
 // Proceed

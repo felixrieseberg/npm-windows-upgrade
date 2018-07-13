@@ -2,8 +2,7 @@
   "name": "npm-windows-upgrade",
   "description": "Upgrade npm on Windows, easily and automatically",
   "os": [
-    "!darwin",
-    "!linux"
+    "win32"
   ],
   "scripts": {
     "build": "babel src --out-dir lib --source-maps true",
