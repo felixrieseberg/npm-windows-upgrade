@@ -67,26 +67,6 @@ describe('Find-Npm', () => {
       .catch(err => console.log(err))
   })
 
-  it(`should remove newlines from npm's output`, (done) => {
-    const utilMock = {
-      isPathAccessible: (path) => path.includes('test-npm')
-    }
-
-    mockery.registerMock('child_process', cpMock)
-    mockery.registerMock('./utils', utilMock)
-
-    const findNpm = require('../../src/find-npm')
-    execReturnValue = 'C:\\test-npm\n'
-
-    findNpm()
-      .then(result => {
-        const containsOnlyOneNewline = result.message.includes('C:\\test-npm\n\u001b')
-        containsOnlyOneNewline.should.be.true;
-        done()
-      })
-      .catch(err => console.log(err))
-  })
-
   it(`should prefer PowerShell over npm (if both exist)`, (done) => {
     const fsMock = {
       accessSync: (path) => true
