@@ -17,7 +17,6 @@ Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 
 # Run
 "Starting Upgrade to 6.0.0"
-npm run build
 node .\bin\npm-windows-upgrade --npm-version 6.0.0 --no-spinner
 
 # Check Output
