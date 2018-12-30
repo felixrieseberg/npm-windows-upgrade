@@ -1,8 +1,4 @@
-'use strict'
-
-const path = require('path')
 const mockery = require('mockery')
-const TPromise = require('promise')
 
 const ChildProcessMock = require('../fixtures/child_process')
 
@@ -48,7 +44,7 @@ describe('Upgrader', () => {
 
   it('ensureInternet() should not exit if there is internet', (done) => {
     const utilsMock = {
-      checkInternetConnection: () => new TPromise((resolve) => resolve(true)),
+      checkInternetConnection: () => new Promise((resolve) => resolve(true)),
     }
 
     mockery.registerMock('./utils', utilsMock)
@@ -64,7 +60,7 @@ describe('Upgrader', () => {
   it('ensureInternet() should exit if there is no internet', (done) => {
     let exitCalled
     const utilsMock = {
-      checkInternetConnection: () => new TPromise((resolve) => resolve(false)),
+      checkInternetConnection: () => new Promise((resolve) => resolve(false)),
       exit: () => exitCalled = true
     }
 
@@ -84,7 +80,7 @@ describe('Upgrader', () => {
   it('ensureExecutionPolicy() should exit if the policy is insufficient', (done) => {
     let exitCalled
     const utilsMock = {
-      checkExecutionPolicy: () => new TPromise((resolve) => resolve(false)),
+      checkExecutionPolicy: () => new Promise((resolve) => resolve(false)),
       exit: () => exitCalled = true
     }
 
@@ -103,7 +99,7 @@ describe('Upgrader', () => {
 
   it('ensureExecutionPolicy() should not exit if the policy is sufficient', (done) => {
     const utilsMock = {
-      checkExecutionPolicy: () => new TPromise((resolve) => resolve(true)),
+      checkExecutionPolicy: () => new Promise((resolve) => resolve(true)),
       exit: () => exitCalled = true
     }
 
@@ -119,7 +115,7 @@ describe('Upgrader', () => {
 
   it('wasUpgradeSuccessful() returns true if versions match', (done) => {
     const versionsMock = {
-      getInstalledNPMVersion: () => new TPromise((resolve) => resolve('v1.0.0')),
+      getInstalledNPMVersion: () => new Promise((resolve) => resolve('v1.0.0')),
     }
 
     mockery.registerMock('./versions', versionsMock)
@@ -137,7 +133,7 @@ describe('Upgrader', () => {
 
   it('wasUpgradeSuccessful() returns false if versions do not match', (done) => {
     const versionsMock = {
-      getInstalledNPMVersion: () => new TPromise((resolve) => resolve('v1.1.0')),
+      getInstalledNPMVersion: () => new Promise((resolve) => resolve('v1.1.0')),
     }
 
     mockery.registerMock('./versions', versionsMock)

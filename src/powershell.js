@@ -1,4 +1,4 @@
-const {spawn} = require('child_process')
+const { spawn } = require('child_process')
 const path = require('path')
 
 const debug = require('./debug')
@@ -41,7 +41,7 @@ function runUpgrade (version, npmPath) {
       stderr.push(data.toString())
     })
 
-    child.on('exit', () => resolve({stderr, stdout}))
+    child.on('exit', () => resolve({ stderr, stdout }))
     child.stdin.end()
   })
 }

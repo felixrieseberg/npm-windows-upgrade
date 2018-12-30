@@ -5,7 +5,9 @@
     "win32"
   ],
   "scripts": {
-    "test": "standard \"./src/*.js\" && mocha"
+    "lint": "standard \"./src/*.js\"",
+    "unit": "mocha",
+    "test": "npm run lint && npm run unit"
   },
   "version": "6.0.0",
   "private": false,

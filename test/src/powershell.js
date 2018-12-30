@@ -1,5 +1,3 @@
-'use strict'
-
 const path = require('path')
 const mockery = require('mockery')
 const ChildProcessMock = require('../fixtures/child_process')
