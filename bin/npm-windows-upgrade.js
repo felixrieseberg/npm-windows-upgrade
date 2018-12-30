@@ -1,7 +1,7 @@
 #! /usr/bin/env node
 
 // Check for incompatibilities
-require('../scr/compatible')
+require('../src/compatible')
 
 var program = require('commander')
 var pack = require('../package.json')
