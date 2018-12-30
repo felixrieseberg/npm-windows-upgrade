@@ -21,7 +21,7 @@ describe('Utils', () => {
       const oldExit = process.exit
       process.exit = () => done()
 
-      const utils = require('../../lib/utils')
+      const utils = require('../../src/utils')
       utils.exit(0)
 
       process.exit = oldExit
@@ -36,7 +36,7 @@ describe('Utils', () => {
         }
       })
 
-      const utils = require('../../lib/utils')
+      const utils = require('../../src/utils')
 
       utils.checkInternetConnection()
         .then((result) => {
@@ -53,7 +53,7 @@ describe('Utils', () => {
         }
       })
 
-      const utils = require('../../lib/utils')
+      const utils = require('../../src/utils')
 
       utils.checkInternetConnection()
         .then(result => {
@@ -76,7 +76,7 @@ describe('Utils', () => {
 
       mockery.registerMock('child_process', cpMock)
 
-      const utils = require('../../lib/utils')
+      const utils = require('../../src/utils')
 
       utils.checkExecutionPolicy()
         .then(result => {
@@ -97,7 +97,7 @@ describe('Utils', () => {
 
       mockery.registerMock('child_process', cpMock)
 
-      const utils = require('../../lib/utils')
+      const utils = require('../../src/utils')
 
       utils.checkExecutionPolicy()
         .then(result => {
@@ -110,14 +110,14 @@ describe('Utils', () => {
 
   describe('isPathAccessible', () => {
     it('should return true if the path is exists', () => {
-      const utils = require('../../lib/utils')
+      const utils = require('../../src/utils')
       const thisExists = utils.isPathAccessible(__dirname)
 
       thisExists.should.be.true
     })
 
     it('should return false if the path does not exists', () => {
-      const utils = require('../../lib/utils')
+      const utils = require('../../src/utils')
       const thisExists = utils.isPathAccessible('C:\\fake-path\\')
 
       thisExists.should.be.false

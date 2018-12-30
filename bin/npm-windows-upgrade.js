@@ -1,10 +1,7 @@
 #! /usr/bin/env node
 
 // Check for incompatibilities
-require('../lib/compatible')
-
-// Proceed
-require('babel-polyfill')
+require('../scr/compatible')
 
 var program = require('commander')
 var pack = require('../package.json')

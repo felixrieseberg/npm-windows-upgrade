@@ -50,7 +50,7 @@ describe('Find-Npm', () => {
 
     mockery.registerMock('child_process', cpMock)
     mockery.registerMock('fs', fsMock)
-    const findNpm = require('../../lib/find-npm')
+    const findNpm = require('../../src/find-npm')
     execReturnValue = 'C:\\test\\'
 
     findNpm()
@@ -77,7 +77,7 @@ describe('Find-Npm', () => {
     mockery.registerMock('child_process', cpMock)
     mockery.registerMock('./utils', utilMock)
 
-    const findNpm = require('../../lib/find-npm')
+    const findNpm = require('../../src/find-npm')
     execReturnValue = 'C:\\test-npm\n'
 
     findNpm()
@@ -96,8 +96,8 @@ describe('Find-Npm', () => {
 
     mockery.registerMock('child_process', cpMock)
     mockery.registerMock('fs', fsMock)
-    const utils =require('../../lib/utils')
-    const findNpm = require('../../lib/find-npm')
+    const utils =require('../../src/utils')
+    const findNpm = require('../../src/find-npm')
     execReturnValue = 'C:\\test-npm\n'
 
     findNpm()
@@ -116,7 +116,7 @@ describe('Find-Npm', () => {
     mockery.registerMock('child_process', cpMock)
     mockery.registerMock('./utils', utilMock)
 
-    const findNpm = require('../../lib/find-npm')
+    const findNpm = require('../../src/find-npm')
     execReturnValue = 'C:\\test-npm\n'
 
     findNpm()
@@ -136,7 +136,7 @@ describe('Find-Npm', () => {
     mockery.registerMock('./utils', utilMock)
 	  execReturnValue = 'C:\\test-npm\n'
 
-    const findNpm = require('../../lib/find-npm')
+    const findNpm = require('../../src/find-npm')
 
     findNpm()
       .then(result => {
@@ -153,7 +153,7 @@ describe('Find-Npm', () => {
 
     mockery.registerMock('fs', fsMock)
 
-    const findNpm = require('../../lib/find-npm')
+    const findNpm = require('../../src/find-npm')
 
     findNpm('C:\\test-path')
       .then(result => {

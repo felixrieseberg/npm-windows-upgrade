@@ -9,9 +9,6 @@ const versions = require('./versions')
 const findNpm = require('./find-npm')
 const debug = require('./debug')
 
-// eslint-disable-next-line no-use-before-define
-const regeneratorRuntime = regeneratorRuntime || require('regenerator-runtime-only')
-
 class Upgrader {
   constructor (program) {
     this.options = program

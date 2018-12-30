@@ -3,6 +3,5 @@ src
 test
 .vscode
 appveyor.yml
-.babelrc
 .gitignore
 yarn-error.log

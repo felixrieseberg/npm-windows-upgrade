@@ -32,7 +32,7 @@ describe('Versions', () => {
   it('getInstalledNPMVersion() should resolve with the installed npm version', (done) => {
     execReturnValue = 'v1.0.0'
     mockery.registerMock('child_process', cpMock)
-    const versions = require('../../lib/versions')
+    const versions = require('../../src/versions')
 
     versions.getInstalledNPMVersion()
       .then(result => {
@@ -45,7 +45,7 @@ describe('Versions', () => {
   it('getAvailableNPMVersions() should resolve with available versions', (done) => {
     execReturnValue = '["v1.0.0", "v2.0.0"]'
     mockery.registerMock('child_process', cpMock)
-    const versions = require('../../lib/versions')
+    const versions = require('../../src/versions')
 
     versions.getAvailableNPMVersions()
       .then(result => {
@@ -58,7 +58,7 @@ describe('Versions', () => {
   it('getLatestNPMVersion() should resolve with the latest available versions', (done) => {
     execReturnValue = '\nv3.0.0\n'
     mockery.registerMock('child_process', cpMock)
-    const versions = require('../../lib/versions')
+    const versions = require('../../src/versions')
 
     versions.getLatestNPMVersion()
       .then(result => {

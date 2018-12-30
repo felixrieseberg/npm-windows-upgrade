@@ -1,6 +1,6 @@
 'use strict'
 
-const debug = require('../../lib/debug')
+const debug = require('../../src/debug')
 
 describe('Debug', () => {
   it('should log if process.env.debug is set', () => {

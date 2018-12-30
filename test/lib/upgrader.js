@@ -38,7 +38,7 @@ describe('Upgrader', () => {
   })
 
   it('constructor() should set inquirer options on the instance', () => {
-    const Upgrader = require('../../lib/upgrader')
+    const Upgrader = require('../../src/upgrader')
     const upgrader = new Upgrader({
       spinner: false
     })
@@ -53,7 +53,7 @@ describe('Upgrader', () => {
 
     mockery.registerMock('./utils', utilsMock)
 
-    const Upgrader = require('../../lib/upgrader')
+    const Upgrader = require('../../src/upgrader')
     const upgrader = new Upgrader({})
 
     upgrader.ensureInternet()
@@ -70,7 +70,7 @@ describe('Upgrader', () => {
 
     mockery.registerMock('./utils', utilsMock)
 
-    const Upgrader = require('../../lib/upgrader')
+    const Upgrader = require('../../src/upgrader')
     const upgrader = new Upgrader({})
 
     upgrader.ensureInternet()
@@ -90,7 +90,7 @@ describe('Upgrader', () => {
 
     mockery.registerMock('./utils', utilsMock)
 
-    const Upgrader = require('../../lib/upgrader')
+    const Upgrader = require('../../src/upgrader')
     const upgrader = new Upgrader({})
 
     upgrader.ensureExecutionPolicy()
@@ -109,7 +109,7 @@ describe('Upgrader', () => {
 
     mockery.registerMock('./utils', utilsMock)
 
-    const Upgrader = require('../../lib/upgrader')
+    const Upgrader = require('../../src/upgrader')
     const upgrader = new Upgrader({})
 
     upgrader.ensureExecutionPolicy()
@@ -124,7 +124,7 @@ describe('Upgrader', () => {
 
     mockery.registerMock('./versions', versionsMock)
 
-    const Upgrader = require('../../lib/upgrader')
+    const Upgrader = require('../../src/upgrader')
     const upgrader = new Upgrader({ npmVersion: 'v1.0.0' })
 
     upgrader.wasUpgradeSuccessful()
@@ -142,7 +142,7 @@ describe('Upgrader', () => {
 
     mockery.registerMock('./versions', versionsMock)
 
-    const Upgrader = require('../../lib/upgrader')
+    const Upgrader = require('../../src/upgrader')
     const upgrader = new Upgrader({ npmVersion: 'v1.0.0' })
 
     upgrader.wasUpgradeSuccessful()

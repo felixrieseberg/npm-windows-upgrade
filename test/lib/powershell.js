@@ -41,7 +41,7 @@ describe('Powershell', () => {
     }
 
     mockery.registerMock('child_process', cpMock)
-    const ps1 = require('../../lib/powershell')
+    const ps1 = require('../../src/powershell')
 
     ps1.runUpgrade('v1.0.0', 'C://test//path')
       .then(() => {
@@ -64,7 +64,7 @@ describe('Powershell', () => {
     }
 
     mockery.registerMock('child_process', cpMock)
-    const ps1 = require('../../lib/powershell')
+    const ps1 = require('../../src/powershell')
 
     ps1.runSimpleUpgrade('v1.0.0')
       .then(() => {

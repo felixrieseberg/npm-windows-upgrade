@@ -50,8 +50,5 @@
     "debug": "^4.1.1",
     "inquirer": "^6.2.1",
     "prompt": "^1.0.0"
-  },
-  "standard": {
-    "parser": "babel-eslint"
   }
 }
