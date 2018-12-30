@@ -5,3 +5,4 @@ test
 appveyor.yml
 .gitignore
 yarn-error.log
+.npmrc
