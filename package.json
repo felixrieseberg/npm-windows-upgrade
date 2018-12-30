@@ -17,7 +17,7 @@
   },
   "repository": "https://github.com/felixrieseberg/npm-windows-upgrade",
   "engines": {
-    "node": ">= 6.0.0"
+    "node": ">= 8.0.0"
   },
   "keywords": [
     "Windows",

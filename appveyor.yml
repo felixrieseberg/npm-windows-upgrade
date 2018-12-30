@@ -9,7 +9,6 @@ init:
 # Test against these versions of Node.js.
 environment:
   matrix:
-    - nodejs_version: "6.0"
     - nodejs_version: "8.0"
     - nodejs_version: "10.0"
 
@@ -20,7 +19,6 @@ install:
 
 # Post-install test scripts.
 test_script:
-  # Output useful info for debugging.
   - ps: Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
   - ps: if ($env:nodejs_version -Eq "8.0") { npm run test }
   - ps: powershell.exe ".\test\full\test.ps1"
