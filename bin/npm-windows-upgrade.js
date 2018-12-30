@@ -5,7 +5,7 @@ require('../src/compatible')
 
 var program = require('commander')
 var pack = require('../package.json')
-var Upgrader = require('../lib/upgrader')
+var Upgrader = require('../src/upgrader')
 
 program
   .version(pack.version)
