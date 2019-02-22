@@ -5,7 +5,7 @@ Upgrading npm on Windows requires manual steps to ensure that PowerShell/CMD fin
 
 ![](https://raw.githubusercontent.com/felixrieseberg/npm-windows-upgrade/gh-pages/screenshot.png)
 
-### Usage
+## Usage
 First, ensure that you can execute scripts on your system by running the following command from an elevated PowerShell. To run PowerShell as Administrator, click Start, search for PowerShell, right-click PowerShell and select `Run as Administrator`.
 
 ```
@@ -58,13 +58,13 @@ To override the internet connection check, pass `--no-dns-check`. To disable the
 #### Debug Mode
 To see debug output, set a `DEBUG` environment variable (`$env:DEBUG="npm-windows-upgrade"`)
 
-### Issues & Support
+## Issues & Support
 Please do [report your issues on GitHub](https://github.com/felixrieseberg/npm-windows-upgrade/issues). There are a bunch of Windows versions, hundreds of different ways to install Node and npm, and it's likely that this script won't work with a few of them. If you run into trouble and need npm upgraded as soon as possible, [please follow the manual instructions](https://github.com/npm/npm/wiki/Troubleshooting#upgrading-on-windows).
 
 This tool was made with :heart: for npm and Node, but it is provided "as is", without warranty of any kind, expressed or
 implied. For details, please consult the `LICENSE` file.
 
-##### Fix an Attempted Upgrade
+### Fix an Attempted Upgrade
 Chances are that you attempted to upgrade npm before, it somehow failed, and you then went looking for this tool. If the tool fails to upgrade, it may be troubled by partial changes done during `npm install npm` or `npm upgrade npm`. In that case, you will have to completely uninstall Node:
 
  * Uninstall Node.js (select `Uninstall`, not the `Repair` option).
@@ -82,11 +82,11 @@ If you used Chocolatey (https://chocolatey.org/) to install Node.js, be sure to 
  * For Node versions lower than v6.0, please use `npm-windows-upgrade@4.1.1`
  * For Node versions lower than v4.0, please use `npm-windows-upgrade@3.1.1`
 
-### More Useful Node.js Stuff
+## More Useful Node.js Stuff
 Microsoft is working hard to make sure that our users have the best possible experience with Node.js. For a helpful set of content that makes it easier to avoid any potential gotchas, [go check out our Node.js Guidelines](https://github.com/microsoft/nodejs-guidelines) - a collection of tips and advanced best practices!
 
-### Contributing
+## Contributing
 Contributions are extremely welcome! For JavaScript code, please run `grunt test` to check your code against JSCS and JSHint. There's no formal coding guideline for the PowerShell pieces of this tool, but do write code that is commented and comprehensible.
 
-### License
+## License
 MIT, please see `LICENSE` for details. Copyright (c) 2015 - 2017 Felix Rieseberg.
