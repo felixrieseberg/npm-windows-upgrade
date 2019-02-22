@@ -12,7 +12,7 @@ First, ensure that you can execute scripts on your system by running the followi
 Set-ExecutionPolicy Unrestricted -Scope CurrentUser -Force
 ```
 
-Then, to install and use this upgrader tool, run the following command (also from an elevated PowerShell or cmd.exe). Note: This tool requires at least Node v6. For Node versions lower than 4.0, please use `npm-windows-upgrade@3.1.1`, for Node versions lower than 6.0, please use `npm-windows-upgrade@4.1.1`.
+Then, to install and use this upgrader tool, run the following command (also from an elevated PowerShell or cmd.exe). Note: **This tool requires at least Node v8**, please [install an older version for older versions of Node.js](#older-nodejs-versions).
 
 ```
 npm install --global --production npm-windows-upgrade
@@ -75,6 +75,12 @@ Chances are that you attempted to upgrade npm before, it somehow failed, and you
 
 > :memp: Used Chocolatey?
 If you used Chocolatey (https://chocolatey.org/) to install Node.js, be sure to check if npm is removed from the `choco\bin` directory by running the following command: `where.exe npm`. Should it still be there, you will need to either `choco uninstall npm` or delete the files from this bin directory.
+
+### Older Node.js Versions
+
+ * For Node versions lower than v8.0, please use `npm-windows-upgrade@5.0.0`
+ * For Node versions lower than v6.0, please use `npm-windows-upgrade@4.1.1`
+ * For Node versions lower than v4.0, please use `npm-windows-upgrade@3.1.1`
 
 ### More Useful Node.js Stuff
 Microsoft is working hard to make sure that our users have the best possible experience with Node.js. For a helpful set of content that makes it easier to avoid any potential gotchas, [go check out our Node.js Guidelines](https://github.com/microsoft/nodejs-guidelines) - a collection of tips and advanced best practices!
