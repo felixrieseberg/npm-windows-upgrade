@@ -209,7 +209,7 @@ class Upgrader {
         info = `You wanted to install npm ${this.options.npmVersion}, but the installed version is ${this.installedVersion}.\n\n`
         info += 'A common reason is an attempted "npm install npm" or "npm upgrade npm". '
         info += 'As of today, the only solution is to completely uninstall and then reinstall Node.js. '
-        info += 'For a small tutorial, please see https://github.com/felixrieseberg/npm-windows-upgrade#usage.\n'
+        info += 'For a small tutorial, please see https://github.com/felixrieseberg/npm-windows-upgrade#fix-an-attempted-upgrade.\n'
       } else if (this.options.npmVersion) {
         info = `You wanted to install npm ${this.options.npmVersion}, but we could not confirm that the installation succeeded.`
       } else {
