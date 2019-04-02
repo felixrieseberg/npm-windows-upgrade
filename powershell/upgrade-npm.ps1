@@ -104,10 +104,15 @@ function UpdateNpm($PassedNodePath)
 # ---------------------------------------------------------------------------------------------------------
 if (!(IsAdministrator))
 {
-    "NOTADMIN"
-    "Please restart this script from an administrative PowerShell!"
-    "NPM cannot be upgraded without administrative rights. To run PowerShell as Administrator,"
-    "right-click PowerShell and select 'Run as Administrator'"
+    $parentpid=(gwmi win32_process -Filter "processid='$pid'").parentprocessid
+    if((Get-Process -id $parentpid).Name -eq "cmd") {
+        $env = "command prompt"
+    } else {
+        $env = "PowerShell"
+    }
+
+    "Please restart this script from an administrative $env"
+    "NPM cannot be upgraded without administrative rights."
     return
 }
 
