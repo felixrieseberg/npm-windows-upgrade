@@ -3,12 +3,12 @@
 // Check for incompatibilities
 require('../src/compatible')
 
-var program = require('commander')
-var pack = require('../package.json')
-var Upgrader = require('../src/upgrader')
+const program = require('commander')
+const Upgrader = require('../src/upgrader')
+const { getInstalledNPMVersion, nwuVersion } = require('../src/versions')
 
 program
-  .version(pack.version)
+  .version(nwuVersion)
   .option('-d, --no-dns-check', 'Disable the internet connectivity test')
   .option('-p, --no-spinner', 'Disable the spinner animation')
   .option('-e, --no-execution-policy-check', 'Disable the PowerShell execution policy test')
@@ -18,10 +18,13 @@ program
   .option('--no-prompt', '[Deprecated] Use --no-spinner instead')
   .parse(process.argv)
 
-console.log('npm-windows-upgrade v' + pack.version)
+const npmVersion = await getInstalledNPMVersion()
+
+console.log('npm v' + npmVersion)
+console.log('npm-windows-upgrade v' + nwuVersion)
 
 // Execute
-var upgrader = new Upgrader(program)
+const upgrader = new Upgrader(program)
 
 upgrader.ensureExecutionPolicy()
   .then(function () { return upgrader.ensureInternet() })
