@@ -7,14 +7,14 @@ const nwuVersion = require('../package.json').version
  */
 function getInstalledNPMVersion () {
   return new Promise((resolve, reject) => {
-    let nodeVersion
+    let npmVersion
 
     exec('npm -v', (err, stdout) => {
       if (err) {
         reject(new Error('Could not determine npm version.'))
       } else {
-        nodeVersion = stdout.replace(/\n/, '')
-        resolve(nodeVersion)
+        npmVersion = stdout.replace(/\n/, '')
+        resolve(npmVersion)
       }
     })
   })
